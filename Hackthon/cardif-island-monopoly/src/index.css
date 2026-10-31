@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  background-color: #fdf2e9;
+  background-image: radial-gradient(#f9d5c5 1.6px, transparent 1.6px);
+  background-size: 22px 22px;
+  font-family: "Huninn", "Arial Rounded MT Bold", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+
+/* Cute chunky "pressable" buttons */
+.btn-pop {
+  box-shadow: 0 3px 0 rgba(120, 72, 40, 0.22);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.btn-pop:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(120, 72, 40, 0.22);
+}
+
+/* Cream card with soft cartoon outline */
+.card-cute {
+  background: #fffaf3;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px #f3d9c6, 0 10px 24px rgba(180, 110, 70, 0.18);
+}
+
+/* 3D Scene & Perspective Helpers */
+.scene-perspective {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* 3D City Board Slab Thickness Effects (Sky & Marble City Base) */
+.board-slab-3d {
+  transform-style: preserve-3d;
+  box-shadow:
+    -8px 12px 0px #fef3c7,
+    -14px 20px 0px #d6a77a,
+    -22px 34px 46px rgba(180, 110, 70, 0.35);
+}
+
+/* 3D City Block Tile Extrusion */
+.tile-3d {
+  transform-style: preserve-3d;
+  box-shadow:
+    -3px 4px 0px #f3d9c6,
+    -5px 7px 10px rgba(150, 90, 60, 0.18);
+}
+
+.tile-3d-active {
+  transform: translateZ(9px);
+  box-shadow:
+    -5px 8px 0px #f9a8d4,
+    0 0 22px rgba(244, 114, 182, 0.6);
+}
+
+.tile-3d-danger {
+  transform: translateZ(9px);
+  box-shadow:
+    -5px 8px 0px #dc2626,
+    0 0 24px rgba(239, 68, 68, 0.75);
+}
+
+/* 3D Volumetric Humanoid Limb Animations */
+@keyframes legSwing3DLeft {
+  0%, 100% { transform: rotateX(-38deg); }
+  50% { transform: rotateX(38deg); }
+}
+
+@keyframes legSwing3DRight {
+  0%, 100% { transform: rotateX(38deg); }
+  50% { transform: rotateX(-38deg); }
+}
+
+@keyframes characterBob3D {
+  0%, 100% { transform: translateZ(0px); }
+  50% { transform: translateZ(3px); }
+}
+
+@keyframes shieldPulse {
+  0%, 100% { transform: scale(1); opacity: 0.55; }
+  50% { transform: scale(1.14); opacity: 0.9; }
+}
+
+.animate-3d-limb-l {
+  animation: legSwing3DLeft 0.24s infinite ease-in-out;
+}
+
+.animate-3d-limb-r {
+  animation: legSwing3DRight 0.24s infinite ease-in-out;
+}
+
+.animate-3d-bob {
+  animation: characterBob3D 1.8s infinite ease-in-out;
+}
+
+.animate-shield-pulse {
+  animation: shieldPulse 2s infinite ease-in-out;
+}
+
+/* ==========================================
+   Insurance event scene animations
+   ========================================== */
+@keyframes evDriveAcross { from { transform: translateX(var(--from, 320px)); } to { transform: translateX(var(--to, -340px)); } }
+@keyframes evKnock {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  40% { transform: translate(-60px, -80px) rotate(-270deg); }
+  100% { transform: translate(-100px, 12px) rotate(-450deg); }
+}
+@keyframes evPop { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.4); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes evPopOut {
+  0% { transform: scale(0); opacity: 0; }
+  30% { transform: scale(1.5); opacity: 1; }
+  70% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0; }
+}
+@keyframes evFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes evSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes evShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px) rotate(-2deg); } 75% { transform: translateX(4px) rotate(2deg); } }
+@keyframes evWobble { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+@keyframes evBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes evRain { from { transform: translateY(-40px) rotate(15deg); } to { transform: translateY(220px) rotate(15deg); } }
+@keyframes evFlyAway {
+  from { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  to { transform: translate(var(--tx, -140px), var(--ty, -90px)) rotate(540deg); opacity: 0; }
+}
+@keyframes evFlicker { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.15, 0.88); } }
+@keyframes evGrow { from { transform: scale(0.2); } to { transform: scale(1); } }
+@keyframes evRise {
+  0% { transform: translateY(0) scale(0.8); opacity: 0.9; }
+  100% { transform: translateY(-90px) scale(1.6); opacity: 0; }
+}
+@keyframes evSlip {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  30% { transform: translate(6px, -24px) rotate(35deg); }
+  100% { transform: translate(14px, 14px) rotate(-90deg); }
+}
+@keyframes evFlash { 0%, 100% { opacity: 0; } 20% { opacity: 0.85; } 40% { opacity: 0; } 55% { opacity: 0.6; } }
+@keyframes evDrop {
+  from { transform: translateY(0) rotate(0deg); opacity: 1; }
+  to { transform: translateY(150px) rotate(400deg); opacity: 0; }
+}
+@keyframes evTint { from { opacity: 0; } to { opacity: 0.55; } }
+
+/* Result screen: insurance shield drop & money fly-away */
+@keyframes evShieldDrop {
+  0% { transform: translateY(-120px) scale(0.5); opacity: 0; }
+  60% { transform: translateY(10px) scale(1.15); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes evMoneyFly {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--tx, 60px), -130px) rotate(var(--r, 30deg)); opacity: 0; }
+}
+@keyframes evCoinRain {
+  0% { transform: translateY(-60px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(110px); opacity: 0; }
+}
+@keyframes evCardIn {
+  0% { transform: translateY(30px) scale(0.85); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.animate-card-in { animation: evCardIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
