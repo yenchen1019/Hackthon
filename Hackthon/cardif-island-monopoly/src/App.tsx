@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 // ==========================================
 // 1. INLINE SVG ICONS
@@ -247,7 +247,7 @@ export interface CharacterPreset {
 const CHARACTER_MODELS: CharacterPreset[] = [
   {
     id: 'advisor',
-    name: '阿哲',
+    name: 'Alex',
     suitColor: '#059669',
     suitDark: '#065f46',
     hairColor: '#1e293b',
@@ -257,7 +257,7 @@ const CHARACTER_MODELS: CharacterPreset[] = [
   },
   {
     id: 'guardian',
-    name: '小雅',
+    name: 'Mia',
     suitColor: '#0284c7',
     suitDark: '#0369a1',
     hairColor: '#f59e0b',
@@ -268,7 +268,7 @@ const CHARACTER_MODELS: CharacterPreset[] = [
   },
   {
     id: 'tycoon',
-    name: '凱文',
+    name: 'Kevin',
     suitColor: '#7c3aed',
     suitDark: '#5b21b6',
     hairColor: '#f8fafc',
@@ -278,7 +278,7 @@ const CHARACTER_MODELS: CharacterPreset[] = [
   },
   {
     id: 'mogul',
-    name: '豪哥',
+    name: 'Leo',
     suitColor: '#e11d48',
     suitDark: '#9f1239',
     hairColor: '#334155',
@@ -530,7 +530,7 @@ function True3DTileLandmark({ tileId, level, color, icon = '' }: { tileId: numbe
               h={8}
               d={11}
               colors={{ front: "#f8fafc", left: "#cbd5e1", right: "#cbd5e1", top: "#e2e8f0" }}
-              frontContent={<div className="text-[5px] font-black text-sky-700">北車</div>}
+              frontContent={<div className="text-[5px] font-black text-sky-700">TPE</div>}
             />
           </div>
           {/* 3D THSR Bullet Train in Front */}
@@ -906,7 +906,7 @@ function True3DTileLandmark({ tileId, level, color, icon = '' }: { tileId: numbe
               h={9}
               d={12}
               colors={{ front: "#b45309", left: "#92400e", right: "#78350f", top: "#d97706" }}
-              frontContent={<div className="w-4 h-4 rounded-full bg-red-600 text-[6px] text-white font-bold flex items-center justify-center">湯</div>}
+              frontContent={<div className="w-4 h-4 rounded-full bg-red-600 text-[6px] text-white font-bold flex items-center justify-center">♨</div>}
             />
           </div>
         </div>
@@ -1686,30 +1686,30 @@ const CHANCE_MODEL = 99;
 const LIFE_MODEL = 98; // generic life-event milestone block (shows the tile emoji)
 
 const BOARD_TILE_DEFS: Omit<BoardTile, 'id' | 'row' | 'col' | 'gridArea'>[] = [
-  // 童年・求學 (Top Row)
-  { name: "呱呱落地", type: "START", color: "#f472b6", icon: "👶", model: LIFE_MODEL, baseBuilding: 1, hasTree: true },
-  { name: "上小學", type: "PROPERTY", price: 90000, color: "#fb923c", icon: "🎒", model: LIFE_MODEL, baseBuilding: 1 },
-  { name: "機會卡", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
-  { name: "考上大學", type: "INVEST", price: 110000, color: "#8b5cf6", icon: "🎓", model: LIFE_MODEL, baseBuilding: 1 },
-  { name: "出國留學", type: "PROPERTY", price: 130000, color: "#0ea5e9", icon: "✈️", model: LIFE_MODEL, baseBuilding: 1 },
-  { name: "第一份工作", type: "CORNER", color: "#0284c7", icon: "💼", model: LIFE_MODEL, baseBuilding: 2, bonus: 30000, landMsg: "領到人生第一份薪水" },
-  // 成家・立業 (Right Column)
-  { name: "考駕照開車", type: "RISK", color: "#ef4444", icon: "🚗", model: LIFE_MODEL },
-  { name: "步入禮堂", type: "PROPERTY", price: 150000, color: "#ec4899", icon: "💍", model: LIFE_MODEL, baseBuilding: 2, hasTree: true },
-  { name: "機會卡", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
-  { name: "買第一間房", type: "INVEST", price: 200000, color: "#b45309", icon: "🏠", model: LIFE_MODEL, baseBuilding: 2 },
-  { name: "寶寶誕生", type: "CORNER", color: "#f472b6", icon: "🍼", model: LIFE_MODEL, baseBuilding: 1, bonus: 20000, landMsg: "迎接新生命，領取育兒津貼", hasTree: true },
-  // 中年・家庭 (Bottom Row)
-  { name: "孩子上學", type: "PROPERTY", price: 120000, color: "#6366f1", icon: "📚", model: LIFE_MODEL, baseBuilding: 1 },
-  { name: "機會卡", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
-  { name: "升遷加薪", type: "INVEST", price: 180000, color: "#0284c7", icon: "📈", model: LIFE_MODEL, baseBuilding: 3 },
-  { name: "自行創業", type: "INVEST", price: 160000, color: "#10b981", icon: "🏪", model: LIFE_MODEL, baseBuilding: 2 },
-  { name: "光榮退休", type: "CORNER", color: "#059669", icon: "🏖️", model: LIFE_MODEL, baseBuilding: 1, bonus: 50000, landMsg: "光榮退休，領取退休金", hasTree: true },
-  // 樂齡・傳承 (Left Column)
-  { name: "保障規劃", type: "INSURANCE", price: 60000, color: "#10b981", icon: "🛡️", model: 14, baseBuilding: 3 },
-  { name: "機會卡", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
-  { name: "含飴弄孫", type: "PROPERTY", price: 105000, color: "#e11d48", icon: "👴", model: LIFE_MODEL, baseBuilding: 1, hasTree: true },
-  { name: "財富傳承", type: "PROPERTY", price: 90000, color: "#f97316", icon: "📜", model: LIFE_MODEL, baseBuilding: 1 },
+  // Childhood & School (Top Row)
+  { name: "Born", type: "START", color: "#f472b6", icon: "👶", model: LIFE_MODEL, baseBuilding: 1, hasTree: true },
+  { name: "School", type: "PROPERTY", price: 90000, color: "#fb923c", icon: "🎒", model: LIFE_MODEL, baseBuilding: 1 },
+  { name: "Chance", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
+  { name: "College", type: "INVEST", price: 110000, color: "#8b5cf6", icon: "🎓", model: LIFE_MODEL, baseBuilding: 1 },
+  { name: "Abroad", type: "PROPERTY", price: 130000, color: "#0ea5e9", icon: "✈️", model: LIFE_MODEL, baseBuilding: 1 },
+  { name: "First Job", type: "CORNER", color: "#0284c7", icon: "💼", model: LIFE_MODEL, baseBuilding: 2, bonus: 30000, landMsg: "got their first paycheck" },
+  // Family & Career (Right Column)
+  { name: "Driving", type: "RISK", color: "#ef4444", icon: "🚗", model: LIFE_MODEL },
+  { name: "Wedding", type: "PROPERTY", price: 150000, color: "#ec4899", icon: "💍", model: LIFE_MODEL, baseBuilding: 2, hasTree: true },
+  { name: "Chance", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
+  { name: "New Home", type: "INVEST", price: 200000, color: "#b45309", icon: "🏠", model: LIFE_MODEL, baseBuilding: 2 },
+  { name: "New Baby", type: "CORNER", color: "#f472b6", icon: "🍼", model: LIFE_MODEL, baseBuilding: 1, bonus: 20000, landMsg: "welcomed a baby and got a childcare bonus", hasTree: true },
+  // Midlife & Family (Bottom Row)
+  { name: "Kids' School", type: "PROPERTY", price: 120000, color: "#6366f1", icon: "📚", model: LIFE_MODEL, baseBuilding: 1 },
+  { name: "Chance", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
+  { name: "Promotion", type: "INVEST", price: 180000, color: "#0284c7", icon: "📈", model: LIFE_MODEL, baseBuilding: 3 },
+  { name: "Startup", type: "INVEST", price: 160000, color: "#10b981", icon: "🏪", model: LIFE_MODEL, baseBuilding: 2 },
+  { name: "Retire", type: "CORNER", color: "#059669", icon: "🏖️", model: LIFE_MODEL, baseBuilding: 1, bonus: 50000, landMsg: "retired and collected a pension", hasTree: true },
+  // Golden Years & Legacy (Left Column)
+  { name: "Insurance", type: "INSURANCE", price: 60000, color: "#10b981", icon: "🛡️", model: 14, baseBuilding: 3 },
+  { name: "Chance", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
+  { name: "Grandkids", type: "PROPERTY", price: 105000, color: "#e11d48", icon: "👴", model: LIFE_MODEL, baseBuilding: 1, hasTree: true },
+  { name: "Legacy", type: "PROPERTY", price: 90000, color: "#f97316", icon: "📜", model: LIFE_MODEL, baseBuilding: 1 },
 ];
 
 const BOARD_TILES: BoardTile[] = BOARD_TILE_DEFS.map((t, id) => {
@@ -1725,7 +1725,7 @@ const INITIAL_OWNERS: Record<number, number> = { 1: 0, 7: 1, 11: 2, 13: 0, 14: 3
 // ==========================================
 // 7. CHANCE CARDS DATA & MULTIPLAYER TYPES
 // ==========================================
-type Insurer = '法國巴黎人壽' | '法國巴黎產險';
+type Insurer = 'BNP Paribas Cardif Life' | 'BNP Paribas Cardif General';
 
 interface ChanceCard {
   id: number;
@@ -1745,152 +1745,154 @@ interface ChanceCard {
 // Official sources:
 //  法國巴黎人壽 https://life.cardif.com.tw  (傷害保險 a232、健康保險 a233、理賠程序 a314、關於我們 a1)
 //  法國巴黎產險 https://nonlife.cardif.com.tw (居家保險 a21、人身保險 a22、財產保險 a23)
-const TIP_15_DAYS = '法國巴黎人壽理賠程序：文件齊備後，保險人應於 15 天內給付理賠金。';
-const TIP_DIAGNOSIS = '申請理賠的「診斷證明書」須為正本，或加蓋醫院紅色印章的副本，不接受影印本。';
-const TIP_LIFE_HOTLINE = '法國巴黎人壽服務／申訴專線：0800-012-899。';
-const TIP_NONLIFE_HOTLINE = '法國巴黎產險服務／申訴專線：0800-266-288。';
+const TIP_15_DAYS = 'Cardif Life claims: once all documents are complete, the insurer pays the claim within 15 days.';
+const TIP_DIAGNOSIS = 'The medical certificate for a claim must be the original, or a copy stamped with the hospital\'s red seal. Photocopies are not accepted.';
+const TIP_LIFE_HOTLINE = 'Cardif Life service & complaints hotline: 0800-012-899.';
+const TIP_NONLIFE_HOTLINE = 'Cardif General service & complaints hotline: 0800-266-288.';
 
 const CHANCE_CARDS: ChanceCard[] = [
   {
     id: 1,
-    title: "過馬路被車撞了！",
-    desc: "綠燈過馬路，還是被闖紅燈的車子撞倒，受傷住院…",
+    title: "Hit by a car!",
+    desc: "Crossing on a green light, but a car ran the red. Injured and sent to hospital…",
     deltaMoney: -120000,
     insuredBonus: 120000,
     icon: "🚗",
-    tag: "意外風險",
+    tag: "Accident",
     scene: "car",
-    insurer: "法國巴黎產險",
-    claimName: "永保平安傷害保險",
-    coverage: "傷害住院保險金（日額型、實支實付型、意外門診手術）",
+    insurer: "BNP Paribas Cardif General",
+    claimName: "Peace of Mind Personal Accident Insurance",
+    coverage: "Accident hospitalization (daily, reimbursement, outpatient surgery)",
     tip: TIP_DIAGNOSIS,
   },
   {
     id: 2,
-    title: "半夜急性盲腸炎",
-    desc: "肚子痛到冒冷汗，救護車緊急送醫，開刀住院 5 天。",
+    title: "Appendicitis at midnight",
+    desc: "Sharp stomach pain, an ambulance ride, surgery and 5 days in hospital.",
     deltaMoney: -80000,
     insuredBonus: 80000,
     icon: "🏥",
-    tag: "醫療風險",
+    tag: "Medical",
     scene: "hospital",
-    insurer: "法國巴黎人壽",
-    claimName: "住院醫療保險",
-    coverage: "住院日額、手術、出院療養、門診醫療給付",
+    insurer: "BNP Paribas Cardif Life",
+    claimName: "Hospital Medical Insurance",
+    coverage: "Daily hospital cash, surgery, recovery and outpatient benefits",
     tip: TIP_15_DAYS,
   },
   {
     id: 3,
-    title: "颱風豪雨淹進家裡",
-    desc: "強颱過境，一樓淹水，家具和電器都泡水了。",
+    title: "Typhoon floods the house",
+    desc: "A strong typhoon hit. The ground floor flooded and the furniture is soaked.",
     deltaMoney: -60000,
     insuredBonus: 50000,
     icon: "🌀",
-    tag: "天災風險",
+    tag: "Natural Disaster",
     scene: "typhoon",
-    insurer: "法國巴黎產險",
-    claimName: "住宅颱風及洪水災害補償保險",
-    coverage: "颱風、洪水災害補償",
+    insurer: "BNP Paribas Cardif General",
+    claimName: "Residential Typhoon & Flood Insurance",
+    coverage: "Typhoon and flood damage",
     tip: TIP_NONLIFE_HOTLINE,
   },
   {
     id: 4,
-    title: "雨天踩到香蕉皮滑倒",
-    desc: "捷運站外地板濕滑，一屁股坐下去，手腕骨折打石膏。",
+    title: "Slipped on a banana peel",
+    desc: "A wet floor outside the metro station. A hard fall and a broken wrist in a cast.",
     deltaMoney: -50000,
     insuredBonus: 50000,
     icon: "🍌",
-    tag: "意外風險",
+    tag: "Accident",
     scene: "fall",
-    insurer: "法國巴黎產險",
-    claimName: "個人傷害保險 傷害醫療保險給付附加條款（日額型）",
-    coverage: "傷害醫療住院給付（含骨折未住院）",
-    tip: '骨折申請理賠時，依案件可能需要附上 X 光片。',
+    insurer: "BNP Paribas Cardif General",
+    claimName: "Personal Accident Insurance – Accident Medical Rider (Daily)",
+    coverage: "Accident medical benefits (incl. fractures without hospitalization)",
+    tip: 'Fracture claims may require X-ray images, depending on the case.',
   },
   {
     id: 5,
-    title: "煮泡麵忘記關火",
-    desc: "鍋子燒乾起火，廚房被燒得黑漆漆，要重新整修。",
+    title: "Left the stove on",
+    desc: "The pot boiled dry and caught fire. The kitchen is blackened and needs repairs.",
     deltaMoney: -90000,
     insuredBonus: 80000,
     icon: "🔥",
-    tag: "居家風險",
+    tag: "Home",
     scene: "fire",
-    insurer: "法國巴黎產險",
-    claimName: "住宅火災保險",
-    coverage: "火災",
+    insurer: "BNP Paribas Cardif General",
+    claimName: "Residential Fire Insurance",
+    coverage: "Fire",
     tip: TIP_NONLIFE_HOTLINE,
   },
   {
     id: 6,
-    title: "夜市吃到食物中毒",
-    desc: "路邊攤吃完上吐下瀉，送急診住院觀察。",
+    title: "Food poisoning at the night market",
+    desc: "Street food gone wrong. Off to the ER for observation.",
     deltaMoney: -30000,
     insuredBonus: 30000,
     icon: "🍢",
-    tag: "意外風險",
+    tag: "Accident",
     scene: "food",
-    insurer: "法國巴黎產險",
-    claimName: "永保平安傷害保險",
-    coverage: "食物中毒、住院慰問",
+    insurer: "BNP Paribas Cardif General",
+    claimName: "Peace of Mind Personal Accident Insurance",
+    coverage: "Food poisoning, hospitalization care benefit",
     tip: TIP_DIAGNOSIS,
   },
   {
     id: 7,
-    title: "錢包和手機被偷了！",
-    desc: "逛街時被扒手摸走皮夾和手機，證件要補辦、信用卡還被盜刷。",
+    title: "Wallet and phone stolen!",
+    desc: "A pickpocket took your wallet and phone. IDs need replacing and your card was misused.",
     deltaMoney: -40000,
     insuredBonus: 35000,
     icon: "👛",
-    tag: "財物風險",
+    tag: "Property",
     scene: "theft",
-    insurer: "法國巴黎產險",
-    claimName: "個人皮件、證件及行動電話盜打賠償保險",
-    coverage: "皮件賠償、卡片或證件重置費用、卡片盜用或行動電話盜打費用",
+    insurer: "BNP Paribas Cardif General",
+    claimName: "Personal Wallet, ID & Mobile Phone Misuse Insurance",
+    coverage: "Wallet loss, card/ID replacement, card fraud or phone misuse charges",
     tip: TIP_NONLIFE_HOTLINE,
   },
   {
     id: 8,
-    title: "陽台盆栽被風吹落",
-    desc: "盆栽掉下樓，砸壞樓下鄰居的機車，要負責賠償。",
+    title: "Flowerpot blown off the balcony",
+    desc: "It fell and smashed a neighbor's scooter. You're liable for the damage.",
     deltaMoney: -50000,
     insuredBonus: 50000,
     icon: "🪴",
-    tag: "責任風險",
+    tag: "Liability",
     scene: "pot",
-    insurer: "法國巴黎產險",
-    claimName: "住宅第三人責任基本保險",
-    coverage: "住宅第三人責任",
+    insurer: "BNP Paribas Cardif General",
+    claimName: "Residential Third-Party Liability Insurance",
+    coverage: "Residential third-party liability",
     tip: TIP_NONLIFE_HOTLINE,
   },
   {
     id: 9,
-    title: "冰箱突然壞掉了",
-    desc: "冰箱過了原廠保固就罷工！幸好買的時候有加購延長保固。",
+    title: "The fridge broke down",
+    desc: "Right after the warranty ended! Luckily you bought an extended warranty.",
     deltaMoney: -25000,
     insuredBonus: 25000,
     icon: "🧊",
-    tag: "財物風險",
+    tag: "Property",
     scene: "appliance",
-    insurer: "法國巴黎產險",
-    claimName: "產品延長保固費用保險",
-    coverage: "費用賠償保險金",
+    insurer: "BNP Paribas Cardif General",
+    claimName: "Extended Product Warranty Insurance",
+    coverage: "Repair cost reimbursement",
     tip: TIP_NONLIFE_HOTLINE,
   },
   {
     id: 10,
-    title: "健康檢查全部滿分！",
-    desc: "年度健檢報告全綠燈，公司發健康獎金！保持健康也是最好的保障。",
+    title: "Perfect health check-up!",
+    desc: "All green on your annual check-up, and work gave you a health bonus. Staying healthy is the best protection.",
     deltaMoney: 20000,
     icon: "💯",
-    tag: "健康獎勵",
+    tag: "Health Bonus",
     scene: "health",
-    claimName: "無需理賠",
+    claimName: "No claim needed",
     tip: TIP_LIFE_HOTLINE,
   },
 ];
 
 const INSURANCE_PREMIUM = 30000;
+const STARTING_MONEY = 500000;
+const MAX_NAME_LENGTH = 12;
 
 interface PlayerState {
   id: number;
@@ -1898,15 +1900,24 @@ interface PlayerState {
   position: number;
   money: number;
   hasInsurance: boolean;
+  isHuman: boolean;
 }
 
-const INITIAL_PLAYERS: PlayerState[] = CHARACTER_MODELS.map((preset, idx) => ({
-  id: idx,
-  preset,
-  position: 0,
-  money: 500000,
-  hasInsurance: false,
-}));
+// The human always plays seat 0 (with the chosen look + name); the other three looks become CPU players.
+const buildPlayers = (avatarIdx: number, name: string, insured: boolean[] = [false, false, false, false]): PlayerState[] => {
+  const human = { ...CHARACTER_MODELS[avatarIdx], name: name.trim() || 'You' };
+  const cpus = CHARACTER_MODELS.filter((_, i) => i !== avatarIdx);
+  return [human, ...cpus].map((preset, idx) => ({
+    id: idx,
+    preset,
+    position: 0,
+    money: insured[idx] ? STARTING_MONEY - INSURANCE_PREMIUM : STARTING_MONEY,
+    hasInsurance: insured[idx],
+    isHuman: idx === 0,
+  }));
+};
+
+const INITIAL_PLAYERS: PlayerState[] = buildPlayers(0, CHARACTER_MODELS[0].name);
 
 // Slight 2x2 offset (%) on a tile so 4 characters standing on the same tile never overlap
 const PLAYER_TILE_OFFSETS: [number, number][] = [
@@ -1916,11 +1927,17 @@ const PLAYER_TILE_OFFSETS: [number, number][] = [
   [3.4, 3.1],
 ];
 
+// CPU decision helpers
+const CPU_THINK_MS = 1200;
+const CPU_READ_RESULT_MS = 3800;
+const cpuWantsToBuy = (money: number, price: number) => money - price >= 120000 && Math.random() < 0.65;
+
 export default function App() {
   const [players, setPlayers] = useState<PlayerState[]>(INITIAL_PLAYERS);
   const [activeTurnIdx, setActiveTurnIdx] = useState(0);
   const [turnCount, setTurnCount] = useState(0);
   const maxTurns = 12; // 3 full rounds for 4 players
+  const [hasRolled, setHasRolled] = useState(false);
 
   // tileId -> { level, ownerIdx }
   const [ownedTiles, setOwnedTiles] = useState<Record<number, number>>(INITIAL_LEVELS);
@@ -1931,12 +1948,14 @@ export default function App() {
   const [isRolling, setIsRolling] = useState(false);
   const [isWalking, setIsWalking] = useState(false);
   const [hopProgress, setHopProgress] = useState(0);
-  const [logMessage, setLogMessage] = useState("先決定每位玩家要不要買保險吧！");
+  const [logMessage, setLogMessage] = useState("Create your character to begin!");
 
-  // Opening insurance-purchase setup screen
+  // Opening setup: choose a look + name, then decide on insurance
   const [gamePhase, setGamePhase] = useState<'setup' | 'playing'>('setup');
-  const [setupIdx, setSetupIdx] = useState(0);
-  const [insuranceChoices, setInsuranceChoices] = useState<(boolean | null)[]>(CHARACTER_MODELS.map(() => null));
+  const [setupStep, setSetupStep] = useState<'profile' | 'summary'>('profile');
+  const [playerName, setPlayerName] = useState('');
+  const [avatarIdx, setAvatarIdx] = useState(0);
+  const [insuranceChoices, setInsuranceChoices] = useState<boolean[]>([false, false, false, false]);
 
   const [cameraMode, setCameraMode] = useState<'iso' | 'closeup' | 'top'>('iso');
   const [customRotZ, setCustomRotZ] = useState(-28);
@@ -1956,6 +1975,8 @@ export default function App() {
 
   const currentPlayer = players[activeTurnIdx];
   const currentTile = BOARD_TILES[currentPlayer.position];
+  const isHumanTurn = currentPlayer.isHuman;
+  const gameOver = turnCount >= maxTurns;
 
   // Calculate total net worth (Cash + Owned Property Value) for any player
   const getPlayerTotalAssets = (playerIdx: number, playerList = players) => {
@@ -1979,31 +2000,36 @@ export default function App() {
     return 180;
   };
 
+  const turnPrompt = (p: PlayerState) => (p.isHuman ? `Your turn, ${p.preset.name}! Roll the dice` : `🤖 ${p.preset.name}'s turn…`);
+
   // Advance to the next player's turn (or trigger final settlement if maxTurns reached)
   const advanceTurn = (nextTurnCount = turnCount + 1) => {
     setPendingBuyTile(null);
+    setHasRolled(false);
     setTurnCount(nextTurnCount);
     if (nextTurnCount >= maxTurns) {
       setShowSettlementModal(true);
-      setLogMessage("🏆 回合結束！最終資產勝負揭曉！");
+      setLogMessage("🏆 Game over! Time to see who's richest!");
       return;
     }
     const nextIdx = (activeTurnIdx + 1) % players.length;
     setActiveTurnIdx(nextIdx);
-    setLogMessage(`輪到【${players[nextIdx].preset.name}】擲骰前進`);
+    setLogMessage(turnPrompt(players[nextIdx]));
   };
 
-  const rollDiceAndMove = () => {
-    if (gamePhase !== 'playing' || isRolling || isWalking || chanceModalStep !== 'closed' || showSettlementModal) return;
+  const rollDiceAndMove = (byCpu = false) => {
+    if (gamePhase !== 'playing' || gameOver || hasRolled || isRolling || isWalking || chanceModalStep !== 'closed' || showSettlementModal) return;
+    if (!byCpu && !currentPlayer.isHuman) return;
+    setHasRolled(true);
     setPendingBuyTile(null);
     setIsRolling(true);
     setSpinCount((prev) => prev + 1);
-    setLogMessage(`🎲 【${currentPlayer.preset.name}】擲骰中...`);
+    setLogMessage(`🎲 ${currentPlayer.preset.name} is rolling...`);
 
-    // Make it easy to hit a Chance tile or the Car Crash tile on early rolls
+    // Make it easy for the human to hit a Chance tile, then the Car Crash tile, on early rolls
     let targetSteps = Math.floor(Math.random() * 6) + 1;
-    if (currentPlayer.position === 0 && activeTurnIdx === 0) targetSteps = FIRST_CHANCE_TILE; // Land on 機會卡
-    else if (currentPlayer.position === FIRST_CHANCE_TILE && activeTurnIdx === 0) targetSteps = CAR_CRASH_TILE - FIRST_CHANCE_TILE; // Land on 考駕照開車 (Car Crash!)
+    if (currentPlayer.position === 0 && activeTurnIdx === 0) targetSteps = FIRST_CHANCE_TILE;
+    else if (currentPlayer.position === FIRST_CHANCE_TILE && activeTurnIdx === 0) targetSteps = CAR_CRASH_TILE - FIRST_CHANCE_TILE;
 
     setDiceRoll(targetSteps);
 
@@ -2032,7 +2058,7 @@ export default function App() {
         currentStepCount++;
 
         if (curr === 0) {
-          setLogMessage(`🎉 【${currentPlayer.preset.name}】又長大一歲，領生日紅包 +$50,000`);
+          setLogMessage(`🎉 ${currentPlayer.preset.name} had a birthday! +$50,000 gift`);
         }
 
         setTimeout(() => {
@@ -2055,8 +2081,7 @@ export default function App() {
     const pName = currentPlayer.preset.name;
 
     if (tile.type === "CHANCE") {
-      // Open Interactive 3-Card Chance Draw Modal!
-      setLogMessage(`🃏 【${pName}】踩到機會卡格子！請抽取一張機會卡`);
+      setLogMessage(`🃏 ${pName} landed on Chance! Draw a card`);
       setChanceModalStep('pick');
       return;
     }
@@ -2070,9 +2095,9 @@ export default function App() {
     if (tile.type === "INSURANCE") {
       if (!currentPlayer.hasInsurance && tile.price && currentPlayer.money >= tile.price) {
         setPendingBuyTile(tile);
-        setLogMessage(`🛡️ 【${pName}】來到人生保障規劃站，要補買法國巴黎保險嗎？`);
+        setLogMessage(`🛡️ ${pName} reached the Insurance desk. Buy Cardif coverage?`);
       } else {
-        setLogMessage(`🛡️ 【${pName}】檢視人生保障規劃，法國巴黎保險保障持續中！`);
+        setLogMessage(`🛡️ ${pName} reviewed their plan. Cardif coverage is still active!`);
         setTimeout(() => advanceTurn(), 900);
       }
       return;
@@ -2082,7 +2107,7 @@ export default function App() {
       const owner = tileOwners[tileIndex];
       if (owner === undefined && tile.price && currentPlayer.money >= tile.price) {
         setPendingBuyTile(tile);
-        setLogMessage(`🏙️ 【${pName}】迎來人生大事「${tile.name}」，要投入嗎？`);
+        setLogMessage(`🏙️ ${pName} reached "${tile.name}". Invest in it?`);
       } else if (owner !== undefined && owner !== activeTurnIdx) {
         const rent = 25000;
         const ownerName = players[owner].preset.name;
@@ -2093,14 +2118,14 @@ export default function App() {
             return p;
           })
         );
-        setLogMessage(`💸 【${pName}】參與「${tile.name}」支付費用 $${rent.toLocaleString()} 給【${ownerName}】`);
+        setLogMessage(`💸 ${pName} paid $${rent.toLocaleString()} to ${ownerName} for "${tile.name}"`);
         setTimeout(() => advanceTurn(), 1000);
       } else {
         setOwnedTiles((prev) => ({ ...prev, [tileIndex]: Math.min((prev[tileIndex] || 1) + 1, 3) }));
         setPlayers((prev) =>
           prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, money: p.money + 20000 } : p))
         );
-        setLogMessage(`📈 【${pName}】經營「${tile.name}」有成，收益 +$20,000`);
+        setLogMessage(`📈 ${pName}'s "${tile.name}" is paying off: +$20,000`);
         setTimeout(() => advanceTurn(), 900);
       }
       return;
@@ -2111,12 +2136,12 @@ export default function App() {
       setPlayers((prev) =>
         prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, money: p.money + bonus } : p))
       );
-      setLogMessage(`${tile.icon} 【${pName}】${tile.landMsg ?? tile.name} +$${bonus.toLocaleString()}`);
+      setLogMessage(`${tile.icon} ${pName} ${tile.landMsg ?? `reached ${tile.name}`}: +$${bonus.toLocaleString()}`);
       setTimeout(() => advanceTurn(), 1000);
       return;
     }
 
-    setLogMessage(`📍 【${pName}】抵達 ${tile.name}`);
+    setLogMessage(`📍 ${pName} arrived at ${tile.name}`);
     setTimeout(() => advanceTurn(), 900);
   };
 
@@ -2128,7 +2153,7 @@ export default function App() {
   const runEvent = (randomCard: ChanceCard) => {
     setDrawnChanceCard(randomCard);
     setChanceModalStep('animating');
-    setLogMessage(`${randomCard.icon} 【${currentPlayer.preset.name}】${randomCard.title}`);
+    setLogMessage(`${randomCard.icon} ${currentPlayer.preset.name}: ${randomCard.title}`);
 
     const bonus = currentPlayer.hasInsurance && randomCard.insuredBonus ? randomCard.insuredBonus : 0;
     const netDelta = randomCard.deltaMoney + bonus;
@@ -2139,7 +2164,7 @@ export default function App() {
         prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, money: p.money + netDelta } : p))
       );
       setLogMessage(
-        `${randomCard.icon} 【${currentPlayer.preset.name}】${randomCard.title}（${netDelta >= 0 ? '+' : ''}$${netDelta.toLocaleString()}）`
+        `${randomCard.icon} ${currentPlayer.preset.name}: ${randomCard.title} (${netDelta >= 0 ? '+' : '-'}$${Math.abs(netDelta).toLocaleString()})`
       );
     }, EVENT_SCENE_MS);
   };
@@ -2158,7 +2183,7 @@ export default function App() {
       setPlayers((prev) =>
         prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, money: p.money - price, hasInsurance: true } : p))
       );
-      setLogMessage(`🛡️ 【${currentPlayer.preset.name}】成功投保！之後遇到意外都有保障了`);
+      setLogMessage(`🛡️ ${currentPlayer.preset.name} is now insured! Future accidents are covered`);
       setPendingBuyTile(null);
       setTimeout(() => advanceTurn(), 800);
       return;
@@ -2168,38 +2193,66 @@ export default function App() {
     );
     setOwnedTiles((prev) => ({ ...prev, [pendingBuyTile.id]: 2 }));
     setTileOwners((prev) => ({ ...prev, [pendingBuyTile.id]: activeTurnIdx }));
-    setLogMessage(`🏙️ 【${currentPlayer.preset.name}】完成人生大事「${pendingBuyTile.name}」！`);
+    setLogMessage(`🏙️ ${currentPlayer.preset.name} invested in "${pendingBuyTile.name}"!`);
     setPendingBuyTile(null);
     setTimeout(() => advanceTurn(), 700);
   };
 
-  // Answer the "buy insurance?" question for the current setup player
-  const handleSetupChoice = (buy: boolean) => {
-    const next = insuranceChoices.map((c, i) => (i === setupIdx ? buy : c));
-    setInsuranceChoices(next);
-    if (setupIdx < CHARACTER_MODELS.length - 1) setSetupIdx(setupIdx + 1);
-    else setSetupIdx(CHARACTER_MODELS.length); // summary page
+  const handleSkipBuy = () => {
+    if (!pendingBuyTile) return;
+    setLogMessage(`⏭️ ${currentPlayer.preset.name} passed on "${pendingBuyTile.name}"`);
+    setPendingBuyTile(null);
+    setTimeout(() => advanceTurn(), 700);
   };
 
+  // ==========================================
+  // CPU PLAYERS: act automatically on their turn
+  // ==========================================
+  useEffect(() => {
+    if (gamePhase !== 'playing' || isHumanTurn || gameOver || showSettlementModal) return;
+    if (isRolling || isWalking || chanceModalStep === 'animating') return;
+
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    if (chanceModalStep === 'pick') {
+      timer = setTimeout(handlePickChanceCard, CPU_THINK_MS);
+    } else if (chanceModalStep === 'revealed') {
+      timer = setTimeout(handleCloseChanceModal, CPU_READ_RESULT_MS);
+    } else if (pendingBuyTile) {
+      const tile = pendingBuyTile;
+      timer = setTimeout(() => {
+        const buy = tile.type === 'INSURANCE' ? Math.random() < 0.5 : cpuWantsToBuy(currentPlayer.money, tile.price ?? 0);
+        if (buy) handleBuyProperty();
+        else handleSkipBuy();
+      }, CPU_THINK_MS);
+    } else if (!hasRolled) {
+      timer = setTimeout(() => rollDiceAndMove(true), CPU_THINK_MS);
+    }
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gamePhase, activeTurnIdx, isHumanTurn, gameOver, showSettlementModal, isRolling, isWalking, chanceModalStep, pendingBuyTile, hasRolled]);
+
+  // Setup: confirm profile + insurance; CPU players decide on insurance at random
+  const handleSetupChoice = (buy: boolean) => {
+    setInsuranceChoices([buy, Math.random() < 0.5, Math.random() < 0.5, Math.random() < 0.5]);
+    setSetupStep('summary');
+  };
+
+  const setupPlayers = buildPlayers(avatarIdx, playerName, insuranceChoices);
+
   const handleStartGame = () => {
-    setPlayers(
-      INITIAL_PLAYERS.map((p, i) =>
-        insuranceChoices[i]
-          ? { ...p, hasInsurance: true, money: p.money - INSURANCE_PREMIUM }
-          : p
-      )
-    );
+    setPlayers(setupPlayers);
     setGamePhase('playing');
-    setLogMessage(`輪到【${INITIAL_PLAYERS[0].preset.name}】擲骰展開人生旅程`);
+    setLogMessage(`Your turn, ${setupPlayers[0].preset.name}! Roll the dice to start your life journey`);
   };
 
   const handleReset = () => {
     setGamePhase('setup');
-    setSetupIdx(0);
-    setInsuranceChoices(CHARACTER_MODELS.map(() => null));
+    setSetupStep('profile');
+    setInsuranceChoices([false, false, false, false]);
     setPlayers(INITIAL_PLAYERS);
     setActiveTurnIdx(0);
     setTurnCount(0);
+    setHasRolled(false);
     setOwnedTiles(INITIAL_LEVELS);
     setTileOwners(INITIAL_OWNERS);
     setDiceRoll(3);
@@ -2211,7 +2264,7 @@ export default function App() {
     setDrawnChanceCard(null);
     setShowSettlementModal(false);
     setIsHighlightCar(false);
-    setLogMessage("先決定每位玩家要不要買保險吧！");
+    setLogMessage("Create your character to begin!");
   };
 
   const getBoard3DTransform = () => {
@@ -2253,50 +2306,57 @@ export default function App() {
     }))
     .sort((a, b) => b.totalAssets - a.totalAssets);
 
+  const canDrawDemoCard =
+    gamePhase === 'playing' && isHumanTurn && !gameOver && !hasRolled && !isWalking && !isRolling && chanceModalStep === 'closed';
+
   return (
     <div
-      className="min-h-screen text-[#5b3a29] flex items-center justify-center p-2 font-sans select-none overflow-hidden"
+      className="min-h-screen text-[#0c4a6e] flex items-center justify-center p-2 font-sans select-none overflow-hidden"
       onPointerUp={handlePointerUp}
     >
       {/* ======================================================== */}
-      {/* SMARTPHONE FRAME CONTAINER (Sky Blue Daylight City Theme)*/}
+      {/* SMARTPHONE FRAME CONTAINER (Light Blue Sky Theme)         */}
       {/* ======================================================== */}
-      <div className="relative w-full max-w-[500px] h-[880px] bg-gradient-to-b from-[#fff4e6] via-[#fdeef2] to-[#e8f6f0] rounded-[52px] border-[7px] border-white shadow-[0_0_0_3px_#f3d9c6,0_25px_60px_-15px_rgba(180,110,70,0.45)] p-3 flex flex-col justify-between overflow-hidden">
-        
+      <div className="relative w-full max-w-[500px] h-[880px] bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#dbeefe] rounded-[52px] border-[7px] border-white shadow-[0_0_0_3px_#bfe3f7,0_25px_60px_-15px_rgba(14,116,180,0.4)] p-3 flex flex-col justify-between overflow-hidden">
+
         {/* Soft Daylight Sun & Cloud Glow */}
         <div className="absolute -top-12 -right-12 w-56 h-56 bg-white/50 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/40 rounded-full blur-3xl pointer-events-none" />
 
         {/* ======================================================== */}
-        {/* TOP: DYNAMIC ISLAND & 4-PLAYER LIVE SCOREBOARD           */}
+        {/* TOP: 4-PLAYER LIVE SCOREBOARD                            */}
         {/* ======================================================== */}
         <div className="w-full flex flex-col items-center z-50">
-          {/* 4-PLAYER LIVE SCOREBOARD & CAMERA BAR */}
           <div className="w-full grid grid-cols-4 gap-1 px-0.5 mt-1.5">
             {players.map((p, idx) => {
               const isTurn = activeTurnIdx === idx;
               return (
                 <div
                   key={p.id}
-                  onClick={() => !isRolling && !isWalking && setActiveTurnIdx(idx)}
-                  className={`rounded-2xl px-1.5 py-1 border-2 transition cursor-pointer flex flex-col justify-between ${
+                  className={`rounded-2xl px-1.5 py-1 border-2 transition flex flex-col justify-between ${
                     isTurn
-                      ? 'bg-white border-rose-300 shadow-md scale-[1.04]'
-                      : 'bg-white/70 border-white opacity-85 hover:opacity-100'
+                      ? 'bg-white border-sky-400 shadow-md scale-[1.04]'
+                      : 'bg-white/70 border-white opacity-85'
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
+                  <div className="flex items-center justify-between gap-0.5">
+                    <div className="flex items-center gap-1 min-w-0">
                       <ChibiAvatar preset={p.preset} size={18} />
-                      <span className="text-[10px] font-black text-[#5b3a29]">{p.preset.name}</span>
+                      <span className="text-[10px] font-black text-[#0c4a6e] truncate">{p.preset.name}</span>
                     </div>
                     {p.hasInsurance && (
-                      <span title="法巴保單守護" className="text-[9px]">🛡️</span>
+                      <span title="Insured by Cardif" className="text-[9px]">🛡️</span>
                     )}
                   </div>
-                  <div className="text-[10px] font-extrabold text-[#8a5a44] mt-0.5 flex items-center justify-between">
+                  <div className="text-[10px] font-extrabold text-[#2f6f9a] mt-0.5 flex items-center justify-between">
                     <span>${Math.round(p.money / 1000)}K</span>
-                    {isTurn && <span className="text-[8px] bg-rose-300 text-white px-1 rounded-full">回合</span>}
+                    <span
+                      className={`text-[8px] px-1 rounded-full ${
+                        p.isHuman ? 'bg-sky-500 text-white' : 'bg-sky-100 text-sky-600'
+                      }`}
+                    >
+                      {p.isHuman ? 'YOU' : 'CPU'}
+                    </span>
                   </div>
                 </div>
               );
@@ -2309,52 +2369,51 @@ export default function App() {
               <button
                 onClick={() => { setCameraMode('iso'); setCustomRotX(52); setCustomRotZ(-28); }}
                 className={`px-2 py-0.5 rounded-full font-bold transition cursor-pointer ${
-                  cameraMode === 'iso' ? 'bg-rose-300 text-white' : 'text-[#8a5a44]'
+                  cameraMode === 'iso' ? 'bg-sky-400 text-white' : 'text-[#2f6f9a]'
                 }`}
               >
-                3D城市
+                3D City
               </button>
               <button
                 onClick={() => setCameraMode('closeup')}
                 className={`px-2 py-0.5 rounded-full font-bold transition cursor-pointer ${
-                  cameraMode === 'closeup' ? 'bg-rose-300 text-white' : 'text-[#8a5a44]'
+                  cameraMode === 'closeup' ? 'bg-sky-400 text-white' : 'text-[#2f6f9a]'
                 }`}
               >
-                特寫
+                Close-up
               </button>
               <button
                 onClick={() => setCameraMode('top')}
                 className={`px-2 py-0.5 rounded-full font-bold transition cursor-pointer ${
-                  cameraMode === 'top' ? 'bg-rose-300 text-white' : 'text-[#8a5a44]'
+                  cameraMode === 'top' ? 'bg-sky-400 text-white' : 'text-[#2f6f9a]'
                 }`}
               >
-                俯視
+                Top
               </button>
             </div>
 
             <button
               onClick={() => setShowSettlementModal(true)}
-              className="px-2.5 py-1 rounded-full bg-amber-300 hover:bg-amber-200 text-[#5b3a29] font-black text-[10px] btn-pop flex items-center gap-1 cursor-pointer transition"
+              className="px-2.5 py-1 rounded-full bg-sky-200 hover:bg-sky-100 text-[#0c4a6e] font-black text-[10px] btn-pop flex items-center gap-1 cursor-pointer transition"
             >
-              <span>🏆 第 {Math.min(turnCount + 1, maxTurns)}/{maxTurns} 回合 • 結算</span>
+              <span>🏆 Turn {Math.min(turnCount + 1, maxTurns)}/{maxTurns} • Results</span>
             </button>
           </div>
         </div>
 
         {/* ======================================================== */}
-        {/* CENTER STAGE: RICH 3D METROPOLIS CITY MONOPOLY BOARD     */}
+        {/* CENTER STAGE: 3D LIFE-JOURNEY BOARD                      */}
         {/* ======================================================== */}
         <div
           className="relative my-auto w-full h-[520px] flex items-center justify-center scene-perspective overflow-visible cursor-grab active:cursor-grabbing"
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
         >
-          {/* City Island Base with Asphalt Highway Ring */}
+          {/* Island Base */}
           <div
             style={{ transform: getBoard3DTransform() }}
-            className="w-[440px] h-[440px] bg-gradient-to-br from-lime-200 via-green-200 to-emerald-200 rounded-[32px] p-2.5 border-4 border-white board-slab-3d transition-transform duration-500 ease-out relative"
+            className="w-[440px] h-[440px] bg-gradient-to-br from-sky-200 via-sky-100 to-cyan-200 rounded-[32px] p-2.5 border-4 border-white board-slab-3d transition-transform duration-500 ease-out relative"
           >
-            {/* 5x5 City Grid + Rich Central Park */}
             <div className="grid grid-cols-6 grid-rows-6 gap-1.5 w-full h-full relative preserve-3d">
               {BOARD_TILES.map((tile) => {
                 const isHere = currentPlayer.position === tile.id;
@@ -2369,15 +2428,15 @@ export default function App() {
                     style={{ gridArea: tile.gridArea }}
                     className={`relative rounded-2xl flex flex-col justify-between p-1 transition-all duration-300 border-2 preserve-3d ${
                       isHere
-                        ? 'bg-gradient-to-b from-pink-50 to-white border-pink-300 tile-3d-active z-20'
+                        ? 'bg-gradient-to-b from-sky-100 to-white border-sky-400 tile-3d-active z-20'
                         : isAccident && isHighlightCar
                         ? 'bg-gradient-to-b from-red-100 to-red-50 border-red-500 tile-3d-danger animate-pulse'
                         : isChance
                         ? 'bg-gradient-to-b from-amber-200 to-yellow-100 border-amber-400 tile-3d'
-                        : 'bg-[#fffaf3] border-white tile-3d'
+                        : 'bg-white border-white tile-3d'
                     }`}
                   >
-                    {/* City District Color Header + Owner Dot */}
+                    {/* Color Header + Owner Dot */}
                     <div
                       className="w-full h-2 rounded-full shadow-xs flex items-center justify-end px-1"
                       style={{ backgroundColor: tile.color }}
@@ -2390,20 +2449,20 @@ export default function App() {
                       )}
                     </div>
 
-                    {/* City Sidewalk + Icon + District Name */}
+                    {/* Icon + Name */}
                     <div className="flex flex-col items-center justify-center flex-1 text-center">
                       <span className="text-sm leading-none mb-0.5">{tile.icon}</span>
                       <span
                         className={`font-extrabold leading-none tracking-tight ${
-                          isChance ? 'text-[10px] text-amber-700' : 'text-[9px] text-[#5b3a29]'
+                          isChance ? 'text-[10px] text-amber-700' : 'text-[9px] text-[#0c4a6e]'
                         }`}
                       >
                         {tile.name}
                       </span>
                     </div>
 
-                    {/* Road Zebra Crosswalk Detail */}
-                    <div className="w-full h-1 bg-[#f3d9c6] rounded-full flex justify-around items-center px-1">
+                    {/* Crosswalk Detail */}
+                    <div className="w-full h-1 bg-[#bfe3f7] rounded-full flex justify-around items-center px-1">
                       <span className="w-1 h-0.5 bg-white" />
                       <span className="w-1 h-0.5 bg-white" />
                       <span className="w-1 h-0.5 bg-white" />
@@ -2422,7 +2481,7 @@ export default function App() {
                       />
                     </div>
 
-                    {/* 3D Volumetric Street Tree on Green Blocks */}
+                    {/* 3D Street Tree */}
                     {tile.hasTree && tile.model !== 5 && (
                       <div
                         style={{ transform: "translateZ(4px)" }}
@@ -2436,126 +2495,111 @@ export default function App() {
               })}
 
               {/* ======================================================== */}
-              {/* CENTRAL CITY PARK, CANAL RIVER & SKYLINE PLAZA           */}
+              {/* CENTRAL PARK, RIVER & PLAZA                              */}
               {/* ======================================================== */}
               <div
                 style={{ gridArea: `2 / 2 / ${BOARD_SIZE} / ${BOARD_SIZE}` }}
-                className="bg-gradient-to-br from-[#d9f5e5] via-[#fff6e0] to-[#dff1fb] rounded-3xl p-2.5 border-4 border-white flex flex-col justify-between items-center text-center shadow-[inset_0_4px_15px_rgba(14,165,233,0.25)] relative preserve-3d"
+                className="bg-gradient-to-br from-[#e0f2fe] via-white to-[#dff1fb] rounded-3xl p-2.5 border-4 border-white flex flex-col justify-between items-center text-center shadow-[inset_0_4px_15px_rgba(14,165,233,0.25)] relative preserve-3d"
               >
-                {/* Winding Sky-Blue City River / Canal across Central Park */}
                 <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-8 bg-gradient-to-r from-sky-400/70 via-cyan-300/80 to-sky-400/70 border-y border-white/70 -rotate-6 pointer-events-none" />
 
-                {/* Central Marble Fountain Plaza Ring under the 3D Dice */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-white/90 to-sky-100/90 border-4 border-white shadow-md flex items-center justify-center pointer-events-none">
                   <div className="w-16 h-16 rounded-full bg-sky-300/50 border-2 border-sky-400/40" />
                 </div>
 
-                {/* 3D Landmark Skyscraper & 3D Park Trees Standing in Central Park */}
-                <div
-                  style={{ transform: "translateZ(4px)" }}
-                  className="absolute top-14 left-5 preserve-3d pointer-events-none z-20"
-                >
+                <div style={{ transform: "translateZ(4px)" }} className="absolute top-14 left-5 preserve-3d pointer-events-none z-20">
                   <True3DLandmarkSkyscraper />
                 </div>
-                <div
-                  style={{ transform: "translateZ(4px)" }}
-                  className="absolute top-14 right-5 preserve-3d pointer-events-none z-20"
-                >
+                <div style={{ transform: "translateZ(4px)" }} className="absolute top-14 right-5 preserve-3d pointer-events-none z-20">
                   <True3DCityBuilding level={2} color="#10b981" />
                 </div>
-                <div
-                  style={{ transform: "translateZ(4px)" }}
-                  className="absolute bottom-14 left-4 preserve-3d pointer-events-none z-20"
-                >
+                <div style={{ transform: "translateZ(4px)" }} className="absolute bottom-14 left-4 preserve-3d pointer-events-none z-20">
                   <True3DTree scale={1.1} />
                 </div>
-                <div
-                  style={{ transform: "translateZ(4px)" }}
-                  className="absolute bottom-16 left-11 preserve-3d pointer-events-none z-20"
-                >
+                <div style={{ transform: "translateZ(4px)" }} className="absolute bottom-16 left-11 preserve-3d pointer-events-none z-20">
                   <True3DTree scale={0.85} />
                 </div>
-                <div
-                  style={{ transform: "translateZ(4px)" }}
-                  className="absolute bottom-14 right-4 preserve-3d pointer-events-none z-20"
-                >
+                <div style={{ transform: "translateZ(4px)" }} className="absolute bottom-14 right-4 preserve-3d pointer-events-none z-20">
                   <True3DTree scale={1.05} />
                 </div>
-                <div
-                  style={{ transform: "translateZ(4px)" }}
-                  className="absolute top-24 right-10 preserve-3d pointer-events-none z-20"
-                >
+                <div style={{ transform: "translateZ(4px)" }} className="absolute top-24 right-10 preserve-3d pointer-events-none z-20">
                   <True3DMiniCar color="#f59e0b" rotZ={75} />
                 </div>
 
-                {/* Top Active Player Asset Pill */}
+                {/* Active Player Cash Pill */}
                 <div
                   style={{ transform: "translateZ(6px)" }}
-                  className="w-full bg-white/95 backdrop-blur-md rounded-full py-1.5 px-3 border-2 border-[#f3d9c6] shadow-sm flex items-center justify-between z-30"
+                  className="w-full bg-white/95 backdrop-blur-md rounded-full py-1.5 px-3 border-2 border-[#bfe3f7] shadow-sm flex items-center justify-between z-30"
                 >
-                  <span className="text-[10px] text-[#8a5a44] font-extrabold flex items-center gap-1">
+                  <span className="text-[10px] text-[#2f6f9a] font-extrabold flex items-center gap-1 min-w-0">
                     <ChibiAvatar preset={currentPlayer.preset} size={16} />
                     {currentPlayer.hasInsurance && <span>🛡️</span>}
-                    {currentPlayer.preset.name} 現金
+                    <span className="truncate">{currentPlayer.preset.name}'s cash</span>
                   </span>
-                  <span className="text-sm font-black text-[#5b3a29] flex items-center gap-1">
-                    <Icons.Coins className="w-3.5 h-3.5 text-amber-500" />
+                  <span className="text-sm font-black text-[#0c4a6e] flex items-center gap-1">
+                    <Icons.Coins className="w-3.5 h-3.5 text-sky-500" />
                     ${currentPlayer.money.toLocaleString()}
                   </span>
                 </div>
 
                 {/* Bottom Action Button */}
                 <div style={{ transform: "translateZ(8px)" }} className="w-full z-30">
-                  {pendingBuyTile ? (
+                  {pendingBuyTile && isHumanTurn ? (
                     <div className="flex gap-1.5">
                       <button
                         onClick={handleBuyProperty}
-                        className="flex-1 py-2 bg-amber-300 hover:bg-amber-200 text-[#5b3a29] font-black text-[11px] rounded-full btn-pop cursor-pointer"
+                        className="flex-1 py-2 bg-sky-400 hover:bg-sky-300 text-white font-black text-[11px] rounded-full btn-pop cursor-pointer"
                       >
                         {pendingBuyTile.type === 'INSURANCE'
-                          ? `🛡️ 補買保險 (-$${pendingBuyTile.price! / 1000}K)`
-                          : `投入 ${pendingBuyTile.name} (-$${pendingBuyTile.price! / 1000}K)`}
+                          ? `🛡️ Buy insurance (-$${pendingBuyTile.price! / 1000}K)`
+                          : `Invest in ${pendingBuyTile.name} (-$${pendingBuyTile.price! / 1000}K)`}
                       </button>
                       <button
-                        onClick={() => advanceTurn()}
-                        className="px-3 py-2 bg-white hover:bg-[#fff4e6] text-[#a1745a] font-bold text-[11px] rounded-full border-2 border-[#f3d9c6] btn-pop cursor-pointer"
+                        onClick={handleSkipBuy}
+                        className="px-3 py-2 bg-white hover:bg-[#f0f9ff] text-[#4a8ab5] font-bold text-[11px] rounded-full border-2 border-[#bfe3f7] btn-pop cursor-pointer"
                       >
-                        略過
+                        Skip
                       </button>
                     </div>
                   ) : (
                     <button
-                      onClick={rollDiceAndMove}
-                      disabled={isRolling || isWalking || chanceModalStep !== 'closed'}
-                      className="w-full py-2 bg-gradient-to-r from-rose-300 to-orange-300 hover:from-rose-200 hover:to-orange-200 disabled:opacity-40 rounded-full font-black text-white text-xs btn-pop cursor-pointer"
+                      onClick={() => rollDiceAndMove()}
+                      disabled={!isHumanTurn || gameOver || hasRolled || isRolling || isWalking || chanceModalStep !== 'closed'}
+                      className="w-full py-2 bg-gradient-to-r from-sky-400 to-cyan-400 hover:from-sky-300 hover:to-cyan-300 disabled:opacity-50 rounded-full font-black text-white text-xs btn-pop cursor-pointer disabled:cursor-default"
                     >
-                      {isRolling ? "擲骰中..." : isWalking ? "前進中..." : `輪到【${currentPlayer.preset.name}】擲骰`}
+                      {gameOver
+                        ? "Game over 🏆"
+                        : !isHumanTurn
+                        ? `🤖 ${currentPlayer.preset.name} is playing...`
+                        : isRolling
+                        ? "Rolling..."
+                        : isWalking
+                        ? "Moving..."
+                        : hasRolled
+                        ? "Please wait..."
+                        : "🎲 Roll the dice"}
                     </button>
                   )}
                 </div>
               </div>
 
               {/* ======================================================== */}
-              {/* TOP-LEVEL 3D DICE (Centered & Elevated so it NEVER sinks)*/}
+              {/* TOP-LEVEL 3D DICE                                        */}
               {/* ======================================================== */}
               <div
-                style={{
-                  left: "50%",
-                  top: "50%",
-                  transform: "translate(-50%, -50%)",
-                }}
+                style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
                 className="absolute preserve-3d z-50"
               >
                 <True3DDice
                   value={diceRoll}
                   isRolling={isRolling}
                   spinCount={spinCount}
-                  onClick={rollDiceAndMove}
+                  onClick={() => rollDiceAndMove()}
                 />
               </div>
 
               {/* ======================================================== */}
-              {/* ALL 4 3D ARTICULATED CHARACTERS ON THE BOARD AT ONCE     */}
+              {/* ALL 4 3D CHARACTERS ON THE BOARD                         */}
               {/* ======================================================== */}
               {players.map((p, idx) => {
                 const tile = BOARD_TILES[p.position];
@@ -2585,7 +2629,7 @@ export default function App() {
                       className="absolute w-7 h-4 bg-slate-900/45 rounded-full blur-[2px] transition-all duration-150"
                     />
                     {isTurn && (
-                      <div className="absolute w-10 h-10 rounded-full border-2 border-pink-400 bg-pink-300/30 animate-shield-pulse" />
+                      <div className="absolute w-10 h-10 rounded-full border-2 border-sky-400 bg-sky-300/30 animate-shield-pulse" />
                     )}
 
                     <True3DCharacter
@@ -2603,19 +2647,23 @@ export default function App() {
         </div>
 
         {/* ======================================================== */}
-        {/* INTERACTIVE CHANCE CARD DRAW MODAL (3-Card Fan)          */}
+        {/* CHANCE CARD DRAW MODAL (3-Card Fan)                      */}
         {/* ======================================================== */}
         {chanceModalStep !== 'closed' && (
-          <div className="absolute inset-0 bg-[#5b3a29]/45 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-sky-950/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             {chanceModalStep === 'pick' && (
               <div className="w-full max-w-[360px] card-cute rounded-[32px] p-5 text-center space-y-4 animate-card-in">
-                <div className="text-xs font-black text-rose-400 tracking-wider">
-                  🌸 生活大小事 機會卡 🌸
+                <div className="text-xs font-black text-sky-500 tracking-wider">
+                  ✨ Life Chance Card ✨
                 </div>
                 <div className="flex items-center justify-center gap-2">
                   <ChibiAvatar preset={currentPlayer.preset} size={38} />
-                  <div className="text-base font-black text-[#5b3a29] text-left">
-                    【{currentPlayer.preset.name}】<br />抽一張看看今天會發生什麼事？
+                  <div className="text-base font-black text-[#0c4a6e] text-left">
+                    {isHumanTurn ? (
+                      <>{currentPlayer.preset.name},<br />pick a card to see what happens today!</>
+                    ) : (
+                      <>🤖 {currentPlayer.preset.name}<br />is drawing a card...</>
+                    )}
                   </div>
                 </div>
 
@@ -2624,28 +2672,31 @@ export default function App() {
                     <button
                       key={num}
                       onClick={handlePickChanceCard}
+                      disabled={!isHumanTurn}
                       style={{ animation: `evBob 1.4s ease-in-out ${num * 0.2}s infinite` }}
-                      className="h-32 rounded-3xl bg-gradient-to-br from-pink-300 via-rose-300 to-orange-200 border-4 border-white btn-pop hover:scale-105 transition-transform flex flex-col items-center justify-center gap-1.5 cursor-pointer text-white"
+                      className="h-32 rounded-3xl bg-gradient-to-br from-sky-300 via-sky-400 to-cyan-300 border-4 border-white btn-pop enabled:hover:scale-105 transition-transform flex flex-col items-center justify-center gap-1.5 enabled:cursor-pointer text-white"
                     >
                       <span className="text-3xl">🎁</span>
-                      <span className="text-[11px] font-black tracking-wide drop-shadow">機會卡 {num}</span>
+                      <span className="text-[11px] font-black tracking-wide drop-shadow">Card {num}</span>
                     </button>
                   ))}
                 </div>
-                <div className="text-[10px] text-[#a1745a]">
-                  {currentPlayer.hasInsurance ? '🛡️ 你有法巴保險，遇到意外不用怕！' : '⚠️ 你沒有保險，遇到意外要自己付喔…'}
+                <div className="text-[10px] text-[#4a8ab5]">
+                  {currentPlayer.hasInsurance
+                    ? `🛡️ ${isHumanTurn ? "You're" : `${currentPlayer.preset.name} is`} insured by Cardif. No need to worry!`
+                    : `⚠️ ${isHumanTurn ? "You're" : `${currentPlayer.preset.name} is`} not insured. Accidents come out of pocket…`}
                 </div>
               </div>
             )}
 
             {chanceModalStep === 'animating' && drawnChanceCard && (
               <div className="w-full max-w-[360px] card-cute rounded-[32px] p-4 text-center space-y-3 animate-card-in">
-                <div className="inline-block px-3 py-0.5 rounded-full bg-rose-100 text-rose-500 text-[10px] font-black">
+                <div className="inline-block px-3 py-0.5 rounded-full bg-sky-100 text-sky-600 text-[10px] font-black">
                   {drawnChanceCard.tag}
                 </div>
-                <div className="text-lg font-black text-[#5b3a29]">{drawnChanceCard.title}</div>
+                <div className="text-lg font-black text-[#0c4a6e]">{drawnChanceCard.title}</div>
                 <EventScene kind={drawnChanceCard.scene} preset={currentPlayer.preset} />
-                <p className="text-xs text-[#8a5a44] leading-relaxed">{drawnChanceCard.desc}</p>
+                <p className="text-xs text-[#2f6f9a] leading-relaxed">{drawnChanceCard.desc}</p>
               </div>
             )}
 
@@ -2656,70 +2707,69 @@ export default function App() {
               const isLoss = drawnChanceCard.deltaMoney < 0;
               return (
                 <div className="w-full max-w-[360px] card-cute rounded-[32px] p-5 text-center space-y-3 animate-card-in">
-                  <div className="text-base font-black text-[#5b3a29]">
+                  <div className="text-base font-black text-[#0c4a6e]">
                     {drawnChanceCard.icon} {drawnChanceCard.title}
                   </div>
 
                   <InsuranceOutcomeFx protectedByInsurance={insured || !isLoss} />
 
-
-                  <div className={`text-sm font-black ${insured ? 'text-emerald-600' : isLoss ? 'text-rose-500' : 'text-amber-600'}`}>
+                  <div className={`text-sm font-black ${insured ? 'text-emerald-600' : isLoss ? 'text-rose-500' : 'text-sky-600'}`}>
                     {insured
                       ? isLoss
-                        ? '還好有買保險！法巴幫你理賠 🎉'
-                        : '好消息 🎉'
+                        ? 'Glad you were insured! Cardif covers the claim 🎉'
+                        : 'Good news 🎉'
                       : isLoss
-                      ? '沒有保險…只能自己掏腰包 😢'
-                      : '好消息 🎉'}
+                      ? 'No insurance… you pay out of pocket 😢'
+                      : 'Good news 🎉'}
                   </div>
 
-                  <div className="bg-white rounded-2xl p-3 border-2 border-[#f3d9c6] text-xs space-y-1.5 text-left">
-                    <div className="flex justify-between text-[#8a5a44]">
-                      <span>{isLoss ? '事件損失' : '事件獎勵'}</span>
+                  <div className="bg-white rounded-2xl p-3 border-2 border-[#bfe3f7] text-xs space-y-1.5 text-left">
+                    <div className="flex justify-between text-[#2f6f9a]">
+                      <span>{isLoss ? 'Event loss' : 'Event reward'}</span>
                       <span className={`font-black ${isLoss ? 'text-rose-500' : 'text-emerald-600'}`}>
                         {drawnChanceCard.deltaMoney >= 0 ? '+' : '-'}${Math.abs(drawnChanceCard.deltaMoney).toLocaleString()}
                       </span>
                     </div>
                     {drawnChanceCard.insurer ? (
-                      <div className="flex justify-between gap-2 text-[#8a5a44]">
+                      <div className="flex justify-between gap-2 text-[#2f6f9a]">
                         <span className="leading-snug">
                           🛡️ {drawnChanceCard.insurer}
                           <br />
-                          <span className="font-bold">「{drawnChanceCard.claimName}」</span>
+                          <span className="font-bold">"{drawnChanceCard.claimName}"</span>
                         </span>
                         <span className={`font-black shrink-0 ${insured ? 'text-emerald-600' : 'text-slate-400'}`}>
-                          {insured ? `+$${bonus.toLocaleString()}` : '未投保 $0'}
+                          {insured ? `+$${bonus.toLocaleString()}` : 'Not insured $0'}
                         </span>
                       </div>
                     ) : (
-                      <div className="flex justify-between text-[#8a5a44]">
-                        <span>🛡️ 保險</span>
-                        <span className="font-black text-slate-400">無需理賠</span>
+                      <div className="flex justify-between text-[#2f6f9a]">
+                        <span>🛡️ Insurance</span>
+                        <span className="font-black text-slate-400">No claim needed</span>
                       </div>
                     )}
                     {drawnChanceCard.coverage && (
-                      <div className="text-[10px] text-[#a1745a]">保障項目：{drawnChanceCard.coverage}</div>
+                      <div className="text-[10px] text-[#4a8ab5]">Coverage: {drawnChanceCard.coverage}</div>
                     )}
-                    <div className="flex justify-between pt-1.5 border-t border-dashed border-[#f3d9c6] text-[#5b3a29] font-black">
-                      <span>資產變動</span>
+                    <div className="flex justify-between pt-1.5 border-t border-dashed border-[#bfe3f7] text-[#0c4a6e] font-black">
+                      <span>Net change</span>
                       <span className={total >= 0 ? 'text-emerald-600' : 'text-rose-500'}>
                         {total >= 0 ? '+' : '-'}${Math.abs(total).toLocaleString()}
                       </span>
                     </div>
                   </div>
 
-                  <div className="bg-amber-50 border-2 border-amber-100 rounded-2xl px-3 py-2 text-[10.5px] text-[#8a5a44] text-left leading-snug">
-                    💡 <b>理賠小知識：</b>{drawnChanceCard.tip}
-                    <div className="text-[9px] text-[#c09a80] mt-1">
-                      商品資訊來源：法國巴黎人壽／產險官網。遊戲金額為示意，實際理賠依保單條款。
+                  <div className="bg-sky-50 border-2 border-sky-100 rounded-2xl px-3 py-2 text-[10.5px] text-[#2f6f9a] text-left leading-snug">
+                    💡 <b>Claim tip:</b> {drawnChanceCard.tip}
+                    <div className="text-[9px] text-[#7fb0cf] mt-1">
+                      Product info from the BNP Paribas Cardif Taiwan websites. In-game amounts are for illustration only; actual claims follow the policy terms.
                     </div>
                   </div>
 
                   <button
                     onClick={handleCloseChanceModal}
-                    className="w-full py-2.5 bg-gradient-to-r from-rose-300 to-orange-300 text-white font-black text-sm rounded-full btn-pop cursor-pointer"
+                    className="w-full py-2.5 bg-gradient-to-r from-sky-400 to-cyan-400 text-white font-black text-sm rounded-full btn-pop cursor-pointer"
                   >
-                    好的，換下一位 ➔
+                    {isHumanTurn ? 'OK, next player ➔' : `Continue (${currentPlayer.preset.name} is done) ➔`}
                   </button>
                 </div>
               );
@@ -2728,104 +2778,125 @@ export default function App() {
         )}
 
         {/* ======================================================== */}
-        {/* OPENING: ASK EACH PLAYER WHETHER TO BUY INSURANCE        */}
+        {/* OPENING: CREATE YOUR CHARACTER & CHOOSE INSURANCE        */}
         {/* ======================================================== */}
         {gamePhase === 'setup' && (
-          <div className="absolute inset-0 z-[60] bg-gradient-to-b from-[#fff4e6] via-[#fde8ef] to-[#e6f6f1] flex flex-col items-center justify-center p-5 rounded-[44px]">
+          <div className="absolute inset-0 z-[60] bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#e6f6fd] flex flex-col items-center justify-center p-5 rounded-[44px] overflow-y-auto">
             <div className="text-center mb-4">
               <div className="text-3xl mb-1">🏝️🎲</div>
-              <div className="text-xl font-black text-[#5b3a29]">法巴暖心大富翁</div>
-              <div className="text-[11px] text-[#a1745a] mt-0.5">出發前，先替自己準備一份保障吧！</div>
+              <div className="text-xl font-black text-[#0c4a6e]">Cardif Island</div>
+              <div className="text-[11px] text-[#4a8ab5] mt-0.5">A life-journey board game. Get protected before you set off!</div>
             </div>
 
-            {setupIdx < CHARACTER_MODELS.length ? (
-              (() => {
-                const preset = CHARACTER_MODELS[setupIdx];
-                return (
-                  <div key={setupIdx} className="w-full max-w-[350px] card-cute rounded-[32px] p-5 text-center space-y-4 animate-card-in">
-                    <div className="flex justify-center gap-1.5">
-                      {CHARACTER_MODELS.map((m, i) => (
-                        <span
-                          key={m.id}
-                          className={`h-2 rounded-full transition-all ${i === setupIdx ? 'w-6 bg-rose-300' : i < setupIdx ? 'w-2 bg-emerald-300' : 'w-2 bg-[#f3d9c6]'}`}
-                        />
-                      ))}
-                    </div>
-                    <div className="flex justify-center" style={{ animation: 'evBob 1.2s ease-in-out infinite' }}>
-                      <ChibiAvatar preset={preset} size={84} />
-                    </div>
-                    <div className="text-lg font-black text-[#5b3a29]">
-                      【{preset.name}】要購買保險嗎？
-                    </div>
-                    <div className="bg-white rounded-2xl p-3 border-2 border-[#f3d9c6] text-left text-[10.5px] text-[#8a5a44] space-y-1.5">
-                      <div className="font-black text-emerald-600">🛡️ 法巴保障組合 • 遊戲保費 ${INSURANCE_PREMIUM.toLocaleString()}</div>
-                      <div>
-                        <b className="text-[#5b3a29]">法國巴黎人壽</b>
-                        <div>🏥 住院醫療保險：住院日額、手術、門診</div>
-                      </div>
-                      <div>
-                        <b className="text-[#5b3a29]">法國巴黎產險</b>
-                        <div>🚗 永保平安傷害保險：傷害住院、食物中毒</div>
-                        <div>🦴 個人傷害保險 傷害醫療（含骨折未住院）</div>
-                        <div>🏠 住宅火災／颱風洪水／第三人責任保險</div>
-                        <div>👛 個人皮件、證件及行動電話盜打賠償保險</div>
-                      </div>
-                      <div className="text-[9px] text-[#c09a80] pt-1 border-t border-dashed border-[#f3d9c6]">
-                        商品名稱取自 life.cardif.com.tw 與 nonlife.cardif.com.tw；遊戲中的保費與理賠金額為示意，實際依保單條款。
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      <button
-                        onClick={() => handleSetupChoice(false)}
-                        className="py-3 rounded-full bg-white border-2 border-[#f3d9c6] text-[#a1745a] font-black text-sm btn-pop cursor-pointer"
-                      >
-                        先不用 🙅
-                      </button>
-                      <button
-                        onClick={() => handleSetupChoice(true)}
-                        className="py-3 rounded-full bg-gradient-to-r from-emerald-300 to-teal-400 text-white font-black text-sm btn-pop cursor-pointer"
-                      >
-                        我要投保 🛡️
-                      </button>
-                    </div>
+            {setupStep === 'profile' ? (
+              <div className="w-full max-w-[350px] card-cute rounded-[32px] p-5 text-center space-y-3.5 animate-card-in">
+                <div className="flex justify-center" style={{ animation: 'evBob 1.2s ease-in-out infinite' }}>
+                  <ChibiAvatar preset={CHARACTER_MODELS[avatarIdx]} size={72} />
+                </div>
+
+                {/* Avatar picker */}
+                <div className="flex justify-center gap-2">
+                  {CHARACTER_MODELS.map((m, i) => (
+                    <button
+                      key={m.id}
+                      onClick={() => setAvatarIdx(i)}
+                      aria-label={`Choose look ${i + 1}`}
+                      className={`p-1 rounded-2xl border-2 transition cursor-pointer ${
+                        i === avatarIdx ? 'border-sky-400 bg-sky-50 scale-110' : 'border-transparent opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      <ChibiAvatar preset={m} size={34} />
+                    </button>
+                  ))}
+                </div>
+
+                {/* Name input */}
+                <label className="block text-left">
+                  <span className="text-[11px] font-black text-[#2f6f9a]">Your name</span>
+                  <input
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value.slice(0, MAX_NAME_LENGTH))}
+                    placeholder="Enter your name"
+                    maxLength={MAX_NAME_LENGTH}
+                    className="mt-1 w-full rounded-full border-2 border-[#bfe3f7] bg-white px-4 py-2 text-sm font-bold text-[#0c4a6e] placeholder:text-[#9cc7e2] outline-none focus:border-sky-400 select-text"
+                  />
+                </label>
+
+                <div className="text-sm font-black text-[#0c4a6e]">
+                  Buy insurance for {playerName.trim() || 'yourself'}?
+                </div>
+                <div className="bg-white rounded-2xl p-3 border-2 border-[#bfe3f7] text-left text-[10.5px] text-[#2f6f9a] space-y-1.5">
+                  <div className="font-black text-emerald-600">🛡️ Cardif Protection Bundle • Premium ${INSURANCE_PREMIUM.toLocaleString()}</div>
+                  <div>
+                    <b className="text-[#0c4a6e]">BNP Paribas Cardif Life</b>
+                    <div>🏥 Hospital Medical: daily cash, surgery, outpatient</div>
                   </div>
-                );
-              })()
+                  <div>
+                    <b className="text-[#0c4a6e]">BNP Paribas Cardif General</b>
+                    <div>🚗 Personal Accident: hospitalization, food poisoning</div>
+                    <div>🦴 Accident Medical (incl. fractures)</div>
+                    <div>🏠 Home Fire / Typhoon &amp; Flood / Third-Party Liability</div>
+                    <div>👛 Wallet, ID &amp; Mobile Phone Misuse</div>
+                  </div>
+                  <div className="text-[9px] text-[#7fb0cf] pt-1 border-t border-dashed border-[#bfe3f7]">
+                    Product names from life.cardif.com.tw and nonlife.cardif.com.tw. In-game premiums and payouts are for illustration only.
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button
+                    onClick={() => handleSetupChoice(false)}
+                    className="py-3 rounded-full bg-white border-2 border-[#bfe3f7] text-[#4a8ab5] font-black text-sm btn-pop cursor-pointer"
+                  >
+                    No thanks 🙅
+                  </button>
+                  <button
+                    onClick={() => handleSetupChoice(true)}
+                    className="py-3 rounded-full bg-gradient-to-r from-sky-400 to-cyan-400 text-white font-black text-sm btn-pop cursor-pointer"
+                  >
+                    Get insured 🛡️
+                  </button>
+                </div>
+              </div>
             ) : (
               <div className="w-full max-w-[350px] card-cute rounded-[32px] p-5 text-center space-y-3 animate-card-in">
-                <div className="text-base font-black text-[#5b3a29]">大家都準備好了！</div>
+                <div className="text-base font-black text-[#0c4a6e]">Everyone's ready!</div>
                 <div className="space-y-2">
-                  {CHARACTER_MODELS.map((m, i) => (
-                    <div key={m.id} className="flex items-center justify-between bg-white rounded-2xl px-3 py-1.5 border-2 border-[#f3d9c6]">
-                      <div className="flex items-center gap-2">
-                        <ChibiAvatar preset={m} size={30} />
-                        <span className="text-sm font-black text-[#5b3a29]">{m.name}</span>
+                  {setupPlayers.map((p) => (
+                    <div key={p.id} className="flex items-center justify-between bg-white rounded-2xl px-3 py-1.5 border-2 border-[#bfe3f7]">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <ChibiAvatar preset={p.preset} size={30} />
+                        <span className="text-sm font-black text-[#0c4a6e] truncate">{p.preset.name}</span>
+                        <span
+                          className={`text-[9px] font-black px-1.5 rounded-full ${
+                            p.isHuman ? 'bg-sky-500 text-white' : 'bg-sky-100 text-sky-600'
+                          }`}
+                        >
+                          {p.isHuman ? 'YOU' : 'CPU'}
+                        </span>
                       </div>
                       <span
-                        className={`text-[11px] font-black px-2 py-0.5 rounded-full ${
-                          insuranceChoices[i] ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'
+                        className={`text-[11px] font-black px-2 py-0.5 rounded-full shrink-0 ${
+                          p.hasInsurance ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'
                         }`}
                       >
-                        {insuranceChoices[i] ? `🛡️ 已投保 (-$${INSURANCE_PREMIUM / 1000}K)` : '未投保'}
+                        {p.hasInsurance ? `🛡️ Insured (-$${INSURANCE_PREMIUM / 1000}K)` : 'Not insured'}
                       </span>
                     </div>
                   ))}
                 </div>
+                <div className="text-[10px] text-[#4a8ab5]">The 3 CPU players decided on insurance at random.</div>
                 <div className="grid grid-cols-3 gap-2 pt-1">
                   <button
-                    onClick={() => {
-                      setSetupIdx(0);
-                      setInsuranceChoices(CHARACTER_MODELS.map(() => null));
-                    }}
-                    className="py-2.5 rounded-full bg-white border-2 border-[#f3d9c6] text-[#a1745a] font-black text-xs btn-pop cursor-pointer"
+                    onClick={() => setSetupStep('profile')}
+                    className="py-2.5 rounded-full bg-white border-2 border-[#bfe3f7] text-[#4a8ab5] font-black text-xs btn-pop cursor-pointer"
                   >
-                    重選
+                    Back
                   </button>
                   <button
                     onClick={handleStartGame}
-                    className="col-span-2 py-2.5 rounded-full bg-gradient-to-r from-rose-300 to-orange-300 text-white font-black text-sm btn-pop cursor-pointer"
+                    className="col-span-2 py-2.5 rounded-full bg-gradient-to-r from-sky-400 to-cyan-400 text-white font-black text-sm btn-pop cursor-pointer"
                   >
-                    開始遊戲 🎲
+                    Start game 🎲
                   </button>
                 </div>
               </div>
@@ -2834,74 +2905,71 @@ export default function App() {
         )}
 
         {/* ======================================================== */}
-        {/* FINAL 4-PLAYER ASSET WINNER SETTLEMENT MODAL             */}
+        {/* FINAL 4-PLAYER RESULTS MODAL                             */}
         {/* ======================================================== */}
         {showSettlementModal && (
-          <div className="absolute inset-0 bg-[#5b3a29]/45 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-sky-950/40 backdrop-blur-md z-50 flex items-center justify-center p-4">
             <div className="w-full max-w-[380px] card-cute rounded-[32px] p-5 space-y-3 animate-card-in">
               <div className="text-center">
-                <div className="text-xs font-black text-amber-600">🏆 人生大富翁 • 最終資產勝負榜</div>
-                <div className="text-base font-black text-slate-900 mt-0.5">
-                  🎉 冠軍：{rankedPlayers[0].preset.name}（總資產 ${rankedPlayers[0].totalAssets.toLocaleString()}）
+                <div className="text-xs font-black text-sky-600">🏆 Life Journey • Final Rankings</div>
+                <div className="text-base font-black text-[#0c4a6e] mt-0.5">
+                  🎉 Winner: {rankedPlayers[0].preset.name} (${rankedPlayers[0].totalAssets.toLocaleString()})
                 </div>
               </div>
 
               <div className="space-y-2">
                 {rankedPlayers.map((rp, rankIdx) => {
-                  const medals = ['🥇 冠軍', '🥈 亞軍', '🥉 季軍', '4️⃣ 殿軍'];
+                  const medals = ['🥇 1st', '🥈 2nd', '🥉 3rd', '4️⃣ 4th'];
                   return (
                     <div
                       key={rp.id}
                       className={`rounded-2xl p-2.5 border-2 flex items-center justify-between ${
-                        rankIdx === 0
-                          ? 'bg-amber-50 border-amber-300 shadow-sm'
-                          : 'bg-white border-[#f3d9c6]'
+                        rankIdx === 0 ? 'bg-sky-50 border-sky-300 shadow-sm' : 'bg-white border-[#bfe3f7]'
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-black text-slate-700 w-12">
-                          {medals[rankIdx]}
-                        </span>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-xs font-black text-[#0c4a6e] w-12 shrink-0">{medals[rankIdx]}</span>
                         <ChibiAvatar preset={rp.preset} size={28} />
-                        <div>
-                          <div className="text-xs font-black text-slate-900 flex items-center gap-1">
-                            <span>{rp.preset.name}</span>
+                        <div className="min-w-0">
+                          <div className="text-xs font-black text-[#0c4a6e] flex items-center gap-1">
+                            <span className="truncate">{rp.preset.name}</span>
+                            {rp.isHuman && (
+                              <span className="text-[9px] bg-sky-500 text-white px-1.5 rounded-full font-bold">YOU</span>
+                            )}
                             {rp.hasInsurance && (
-                              <span className="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.2 rounded-full font-bold">
-                                🛡️ 法巴保戶
-                              </span>
+                              <span className="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 rounded-full font-bold">🛡️ Insured</span>
                             )}
                           </div>
-                          <div className="text-[10px] text-slate-500">
-                            現金 ${Math.round(rp.money / 1000)}K • 地產 {rp.propCount} 處
+                          <div className="text-[10px] text-[#4a8ab5]">
+                            Cash ${Math.round(rp.money / 1000)}K • {rp.propCount} {rp.propCount === 1 ? 'property' : 'properties'}
                           </div>
                         </div>
                       </div>
 
-                      <div className="text-xs font-black text-sky-900">
-                        ${rp.totalAssets.toLocaleString()}
-                      </div>
+                      <div className="text-xs font-black text-sky-900 shrink-0">${rp.totalAssets.toLocaleString()}</div>
                     </div>
                   );
                 })}
               </div>
 
               <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-[11px] text-emerald-900 leading-snug">
-                💡 <b>勝負關鍵總結：</b> 開局就買<b>法巴保險</b>的角色，遇到車禍、住院、颱風、火災、失竊這些生活意外時都有理賠，資產不會一夕歸零！<br /><span className="text-[9.5px] text-emerald-700/80">法國巴黎保險遍佈全球 30 個地區 • 人壽 0800-012-899 • 產險 0800-266-288</span>
+                💡 <b>Key takeaway:</b> Players who bought <b>Cardif insurance</b> at the start were covered for car accidents, hospital stays, typhoons, fires and theft, so one bad day didn't wipe out their savings!
+                <br />
+                <span className="text-[9.5px] text-emerald-700/80">BNP Paribas Cardif operates in 30 markets • Life 0800-012-899 • General 0800-266-288</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => setShowSettlementModal(false)}
-                  className="py-2 bg-white border-2 border-[#f3d9c6] text-[#a1745a] font-bold text-xs rounded-full btn-pop cursor-pointer"
+                  className="py-2 bg-white border-2 border-[#bfe3f7] text-[#4a8ab5] font-bold text-xs rounded-full btn-pop cursor-pointer"
                 >
-                  繼續遊玩
+                  {gameOver ? 'View board' : 'Keep playing'}
                 </button>
                 <button
                   onClick={handleReset}
-                  className="py-2 bg-gradient-to-r from-rose-300 to-orange-300 text-white font-black text-xs rounded-full btn-pop cursor-pointer"
+                  className="py-2 bg-gradient-to-r from-sky-400 to-cyan-400 text-white font-black text-xs rounded-full btn-pop cursor-pointer"
                 >
-                  重新開局
+                  New game
                 </button>
               </div>
             </div>
@@ -2909,34 +2977,36 @@ export default function App() {
         )}
 
         {/* ======================================================== */}
-        {/* BOTTOM: SKY-BLUE GLASS STATUS & QUICK DEMO ACTIONS       */}
+        {/* BOTTOM: STATUS & QUICK ACTIONS                           */}
         {/* ======================================================== */}
         <div className="space-y-1.5 z-40">
-          <div className="bg-white/90 backdrop-blur-md rounded-full py-1.5 px-3 border-2 border-white shadow-sm text-center text-xs font-bold text-[#5b3a29] truncate">
+          <div className="bg-white/90 backdrop-blur-md rounded-full py-1.5 px-3 border-2 border-white shadow-sm text-center text-xs font-bold text-[#0c4a6e] truncate">
             {logMessage}
           </div>
 
           <div className="grid grid-cols-2 gap-1.5">
             <button
               onClick={() => {
-                if (gamePhase !== 'playing' || isWalking || isRolling || chanceModalStep !== 'closed') return;
+                if (!canDrawDemoCard) return;
+                setHasRolled(true);
                 setPendingBuyTile(null);
                 setPlayers((prev) =>
                   prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, position: FIRST_CHANCE_TILE } : p))
                 );
                 setChanceModalStep('pick');
               }}
-              className="py-2 bg-amber-300 hover:bg-amber-200 text-[#5b3a29] rounded-full text-[11px] font-black btn-pop flex items-center justify-center gap-1 cursor-pointer"
+              disabled={!canDrawDemoCard}
+              className="py-2 bg-sky-400 enabled:hover:bg-sky-300 disabled:opacity-50 text-white rounded-full text-[11px] font-black btn-pop flex items-center justify-center gap-1 enabled:cursor-pointer"
             >
-              <span>🎁 抽機會卡</span>
+              <span>🎁 Draw a Chance card</span>
             </button>
 
             <button
               onClick={handleReset}
-              className="py-2 bg-white/90 hover:bg-white text-[#8a5a44] border-2 border-white rounded-full text-[11px] font-bold btn-pop flex items-center justify-center gap-1 cursor-pointer"
+              className="py-2 bg-white/90 hover:bg-white text-[#2f6f9a] border-2 border-white rounded-full text-[11px] font-bold btn-pop flex items-center justify-center gap-1 cursor-pointer"
             >
               <Icons.RotateCcw className="w-3.5 h-3.5" />
-              <span>重置</span>
+              <span>Reset</span>
             </button>
           </div>
         </div>
