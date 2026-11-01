@@ -9,11 +9,6 @@ const Icons = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
     </svg>
   ),
-  CarCrash: ({ className = "w-5 h-5 text-red-500" }: { className?: string }) => (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-    </svg>
-  ),
   Sparkles: ({ className = "w-4 h-4" }: { className?: string }) => (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.286L13 21l-2.286-6.857L5 12l5.714-2.286L13 3z" />
@@ -516,7 +511,7 @@ function True3DCharacter({
 // 5. DIVERSE 3D TAIPEI LANDMARK ICONS (16 Custom 3D Models!)
 // Every tile gets a unique 6-sided volumetric 3D miniature icon
 // ==========================================
-function True3DTileLandmark({ tileId, level, color }: { tileId: number; level: number; color: string }) {
+function True3DTileLandmark({ tileId, level, color, icon = '' }: { tileId: number; level: number; color: string; icon?: string }) {
   const wrap = "preserve-3d pointer-events-none flex flex-col items-center";
 
   switch (tileId) {
@@ -917,6 +912,56 @@ function True3DTileLandmark({ tileId, level, color }: { tileId: number; level: n
         </div>
       );
 
+    // Life-event milestone: colored pedestal (grows with level) + floating emoji cube
+    case LIFE_MODEL: {
+      const baseH = 4 + Math.max(1, level) * 3;
+      return (
+        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
+          <div style={{ transform: `translateY(${-baseH}px)` }} className="absolute preserve-3d">
+            <VoxelBox3D
+              w={14}
+              h={baseH}
+              d={14}
+              rounded="rounded-[3px]"
+              colors={{ front: color, back: color, left: color, right: color, top: "#fff7ed" }}
+            />
+          </div>
+          <div style={{ transform: `translateY(${-baseH - 14}px)`, animation: 'evBob 2s ease-in-out infinite' }} className="absolute preserve-3d">
+            <VoxelBox3D
+              w={12}
+              h={12}
+              d={12}
+              rounded="rounded-[4px]"
+              border="border border-white/90"
+              colors={{ front: "#ffffff", back: "#f8fafc", left: "#f1f5f9", right: "#e2e8f0", top: "#ffffff" }}
+              frontContent={<span className="text-[8px] leading-none">{icon}</span>}
+              rightContent={<span className="text-[8px] leading-none">{icon}</span>}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    // Dedicated chance tiles: floating golden "?" gift block
+    case CHANCE_MODEL:
+      return (
+        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
+          <div style={{ transform: "translateY(-24px)", animation: 'evBob 1.6s ease-in-out infinite' }} className="absolute preserve-3d">
+            <VoxelBox3D
+              w={14}
+              h={14}
+              d={14}
+              rounded="rounded-[4px]"
+              border="border-2 border-white/80"
+              colors={{ front: "#fbbf24", back: "#f59e0b", left: "#f59e0b", right: "#d97706", top: "#fde68a" }}
+              frontContent={<span className="text-[10px] font-black text-white drop-shadow">?</span>}
+              rightContent={<span className="text-[10px] font-black text-white">?</span>}
+              topContent={<div className="w-full h-1 bg-rose-400" />}
+            />
+          </div>
+        </div>
+      );
+
     default:
       return <True3DCityBuilding level={Math.max(1, level)} color={color} />;
   }
@@ -1237,7 +1282,7 @@ function ChibiAvatar({
 // ==========================================
 // 5c. INSURANCE EVENT SCENES (cute CSS cartoon animations)
 // ==========================================
-type EventSceneKind = 'car' | 'hospital' | 'typhoon' | 'fall' | 'fire' | 'food' | 'travel' | 'health';
+type EventSceneKind = 'car' | 'hospital' | 'typhoon' | 'fall' | 'fire' | 'food' | 'theft' | 'pot' | 'appliance' | 'health';
 
 const EVENT_SCENE_MS = 2800;
 
@@ -1345,6 +1390,10 @@ function EventScene({ kind, preset }: { kind: EventSceneKind; preset: CharacterP
               <ChibiAvatar preset={preset} size={46} mood="shock" />
             </div>
           </At>
+          <div style={anim('evWaterRise', 1.6, 1.0)} className="absolute inset-x-0 bottom-0 bg-sky-400/60 border-t-4 border-sky-200/80 z-20" />
+          <At x="40%" b="10%" z={25}>
+            <span style={anim('evBob', 0.8, 1.6, {}, 'ease-in-out', 'infinite')} className={emoji('text-2xl')}>🪑</span>
+          </At>
           <div style={anim('evFlash', 1.2, 0.8)} className="absolute inset-0 bg-yellow-50 pointer-events-none z-40" />
           <span style={anim('evPopOut', 0.9, 0.8)} className="absolute top-2 left-1/3 text-5xl z-40">⚡</span>
         </div>
@@ -1442,24 +1491,104 @@ function EventScene({ kind, preset }: { kind: EventSceneKind; preset: CharacterP
         </div>
       );
 
-    case 'travel':
+    case 'theft':
       return (
-        <div className={`${frame} bg-gradient-to-b from-sky-300 to-sky-100`}>
-          <span className="absolute top-8 left-6 text-3xl">☁️</span>
-          <span className="absolute top-14 right-10 text-2xl">☁️</span>
-          <span style={anim('evDriveAcross', 1.8, 0, { '--from': '-80px', '--to': '380px', top: 6, left: 0 } as React.CSSProperties, 'linear')} className="absolute text-5xl">✈️</span>
-          <span style={anim('evDrop', 1.2, 0.7, { top: 30, left: '40%' })} className="absolute text-3xl">🧳</span>
-          <div className="absolute inset-x-0 bottom-0 h-[24%] bg-[#e8dcc8]" />
-          <At x="62%" b="16%">
-            <div style={anim('evBob', 0.6, 1.2, {}, 'ease-in-out', 'infinite')}>
-              <ChibiAvatar preset={preset} size={52} mood="sad" />
+        <div className={`${frame} bg-gradient-to-b from-amber-100 to-orange-50`}>
+          <span className="absolute top-3 left-4 text-4xl">🏬</span>
+          <span className="absolute top-4 right-5 text-3xl">🛍️</span>
+          <div className="absolute inset-x-0 bottom-0 h-[26%] bg-[repeating-linear-gradient(90deg,#f5e1c8_0_26px,#ecd2b2_26px_52px)]" />
+          <At x="40%" b="18%">
+            <div style={anim('evBob', 0.5, 0, {}, 'ease-in-out', 2)}>
+              <div style={anim('evShake', 0.25, 1.3, {}, 'linear', 'infinite')}>
+                <ChibiAvatar preset={preset} size={52} mood="shock" />
+              </div>
             </div>
           </At>
-          <At x="74%" b="64%" z={30}>
-            <span style={anim('evPop', 0.4, 1.6)} className={emoji('text-3xl')}>❓</span>
+          {/* Thief dashes past and grabs wallet + phone */}
+          <At x="50%" b="16%" z={20}>
+            <span style={anim('evDriveAcross', 1.3, 0.5, { '--from': '-260px', '--to': '280px' } as React.CSSProperties, 'cubic-bezier(.4,0,.6,1)')} className={emoji('text-5xl')}>
+              <span className="inline-block -scale-x-100">🏃</span>
+            </span>
           </At>
-          <At x="30%" b="16%">
-            <span style={anim('evPop', 0.4, 1.9)} className={emoji('text-2xl')}>📭</span>
+          <At x="48%" b="44%" z={25}>
+            <span style={anim('evDriveAcross', 0.9, 0.95, { '--from': '0px', '--to': '240px' } as React.CSSProperties, 'ease-in')} className={emoji('text-2xl')}>👛</span>
+          </At>
+          <At x="44%" b="36%" z={25}>
+            <span style={anim('evDriveAcross', 0.9, 1.0, { '--from': '0px', '--to': '260px' } as React.CSSProperties, 'ease-in')} className={emoji('text-2xl')}>📱</span>
+          </At>
+          <At x="52%" b="64%" z={30}>
+            <span style={anim('evPop', 0.4, 1.4)} className={emoji('text-3xl')}>❓</span>
+          </At>
+          <At x="78%" b="58%" z={30}>
+            <span style={anim('evPop', 0.4, 1.9)} className={emoji('text-2xl')}>💳</span>
+          </At>
+        </div>
+      );
+
+    case 'pot':
+      return (
+        <div className={`${frame} bg-gradient-to-b from-sky-200 to-sky-50`}>
+          {/* Apartment with balcony */}
+          <div className="absolute left-4 top-0 bottom-[22%] w-[38%] bg-[#fde2c8] border-r-4 border-[#f3c9a5]">
+            <div className="grid grid-cols-2 gap-2 p-2">
+              <span className="h-6 rounded bg-sky-200" /><span className="h-6 rounded bg-sky-200" />
+              <span className="h-6 rounded bg-sky-200" /><span className="h-6 rounded bg-sky-200" />
+            </div>
+          </div>
+          <div className="absolute left-[38%] top-10 w-10 h-1.5 bg-[#b07a4f] rounded" />
+          <At x="22%" b="50%">
+            <ChibiAvatar preset={preset} size={40} mood="shock" />
+          </At>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <span key={i} style={{ top: `${15 + i * 12}%`, ...anim('evDriveAcross', 0.9, i * 0.15, { '--from': '-40px', '--to': '360px' } as React.CSSProperties, 'linear', 'infinite') }} className="absolute left-0 w-8 h-0.5 bg-white/80 rounded-full" />
+          ))}
+          <div className="absolute inset-x-0 bottom-0 h-[22%] bg-[#9aa0a6]" />
+          <At x="64%" b="12%">
+            <span className={emoji('text-5xl')}>🛵</span>
+          </At>
+          {/* Pot slides off the balcony and falls */}
+          <div style={{ left: '42%', top: 18 }} className="absolute z-20">
+            <span style={anim('evPotFall', 1.1, 0.4, {}, 'ease-in')} className={emoji('inline-block text-3xl')}>🪴</span>
+          </div>
+          <At x="64%" b="40%" z={30}>
+            <span style={anim('evPopOut', 0.8, 1.45)} className={emoji('text-5xl')}>💥</span>
+          </At>
+          <At x="30%" b="76%" z={30}>
+            <span style={anim('evPop', 0.4, 1.6)} className={emoji('text-2xl')}>😱</span>
+          </At>
+        </div>
+      );
+
+    case 'appliance':
+      return (
+        <div className={`${frame} bg-gradient-to-b from-cyan-100 to-sky-50`}>
+          <div className="absolute inset-x-0 bottom-0 h-[24%] bg-[repeating-linear-gradient(90deg,#e0f2fe_0_24px,#cfe9f7_24px_48px)]" />
+          {/* Cute fridge */}
+          <div style={anim('evShake', 0.15, 0.5, {}, 'linear', 6)} className="absolute left-[18%] bottom-[18%] w-20 h-32 rounded-2xl bg-white border-4 border-sky-200 flex flex-col overflow-hidden">
+            <div className="h-1/3 border-b-4 border-sky-200 relative"><span className="absolute right-2 top-2 w-1.5 h-5 rounded bg-sky-300" /></div>
+            <div className="flex-1 relative flex items-center justify-center">
+              <span className="absolute right-2 top-2 w-1.5 h-8 rounded bg-sky-300" />
+              <span style={anim('evPop', 0.4, 1.2)} className="text-3xl">😵</span>
+            </div>
+          </div>
+          {[0, 1].map((i) => (
+            <At key={i} x={`${28 + i * 8}%`} b="78%" z={25}>
+              <span style={anim('evRise', 1.2, 1.0 + i * 0.4, {}, 'ease-out', 'infinite')} className={emoji('text-2xl')}>💨</span>
+            </At>
+          ))}
+          <At x="22%" b="72%" z={30}>
+            <span style={anim('evPopOut', 0.7, 0.9)} className={emoji('text-3xl')}>⚡</span>
+          </At>
+          <At x="62%" b="18%">
+            <span style={anim('evPop', 0.4, 1.4)} className={emoji('text-3xl')}>🧀</span>
+          </At>
+          <At x="76%" b="16%">
+            <div style={anim('evShake', 0.3, 1.2, {}, 'linear', 'infinite')}>
+              <ChibiAvatar preset={preset} size={50} mood="sad" />
+            </div>
+          </At>
+          <At x="62%" b="40%" z={30}>
+            <span style={anim('evPop', 0.4, 1.8)} className={emoji('text-2xl')}>🔧</span>
           </At>
         </div>
       );
@@ -1524,7 +1653,7 @@ function InsuranceOutcomeFx({ protectedByInsurance }: { protectedByInsurance: bo
 }
 
 // ==========================================
-// 6. CITY METROPOLIS BOARD DATA (16 Urban Blocks)
+// 6. LIFE JOURNEY BOARD DATA (20 life-stage tiles, 4 dedicated chance tiles)
 // ==========================================
 interface BoardTile {
   id: number;
@@ -1536,140 +1665,228 @@ interface BoardTile {
   gridArea: string;
   row: number;
   col: number;
+  model: number; // which 3D landmark model to show (see True3DTileLandmark)
   baseBuilding?: number;
   hasTree?: boolean;
+  bonus?: number; // money gained when landing on a corner life event
+  landMsg?: string;
 }
 
-const BOARD_TILES: BoardTile[] = [
-  // 北車中正萬華線 (Top Row: 0 -> 4)
-  { id: 0, name: "台北車站", type: "START", color: "#0284c7", icon: "🚄", gridArea: "1 / 1", row: 0, col: 0, baseBuilding: 2, hasTree: true },
-  { id: 1, name: "西門町", type: "PROPERTY", price: 110000, color: "#8b5cf6", icon: "🛍️", gridArea: "1 / 2", row: 0, col: 1, baseBuilding: 2 },
-  { id: 2, name: "中正紀念堂", type: "INVEST", price: 95000, color: "#0ea5e9", icon: "🏛️", gridArea: "1 / 3", row: 0, col: 2, baseBuilding: 1, hasTree: true },
-  { id: 3, name: "東門永康", type: "CHANCE", color: "#f59e0b", icon: "🥟", gridArea: "1 / 4", row: 0, col: 3 },
-  { id: 4, name: "台大醫院", type: "CORNER", color: "#06b6d4", icon: "🏥", gridArea: "1 / 5", row: 0, col: 4, baseBuilding: 2 },
+// 6x6 ring board: 20 tiles. Corners are 0, 5, 10, 15.
+const BOARD_SIZE = 6;
+const ringPos = (i: number): [number, number] => {
+  const n = BOARD_SIZE - 1;
+  if (i <= n) return [0, i]; // top row, left -> right
+  if (i <= 2 * n) return [i - n, n]; // right column, top -> bottom
+  if (i <= 3 * n) return [n, 3 * n - i]; // bottom row, right -> left
+  return [4 * n - i, 0]; // left column, bottom -> top
+};
 
-  // 大安東區松山線 (Right Col: 5 -> 7)
-  { id: 5, name: "大安森林", type: "PROPERTY", price: 160000, color: "#10b981", icon: "🌳", gridArea: "2 / 5", row: 1, col: 4, baseBuilding: 2, hasTree: true },
-  { id: 6, name: "忠孝復興", type: "RISK", color: "#ef4444", icon: "🚦", gridArea: "3 / 5", row: 2, col: 4 },
-  { id: 7, name: "松山機場", type: "INVEST", price: 120000, color: "#b45309", icon: "✈️", gridArea: "4 / 5", row: 3, col: 4, baseBuilding: 1 },
+const CHANCE_MODEL = 99;
+const LIFE_MODEL = 98; // generic life-event milestone block (shows the tile emoji)
 
-  // 信義南港內湖線 (Bottom Row: 8 -> 12)
-  { id: 8, name: "大直美麗華", type: "CORNER", color: "#ec4899", icon: "🎡", gridArea: "5 / 5", row: 4, col: 4, hasTree: true },
-  { id: 9, name: "內湖科園", type: "PROPERTY", price: 150000, color: "#6366f1", icon: "💻", gridArea: "5 / 4", row: 4, col: 3, baseBuilding: 2 },
-  { id: 10, name: "南港展覽館", type: "CHANCE", color: "#f59e0b", icon: "🚝", gridArea: "5 / 3", row: 4, col: 2 },
-  { id: 11, name: "台北101", type: "PROPERTY", price: 200000, color: "#0284c7", icon: "🏙️", gridArea: "5 / 2", row: 4, col: 1, baseBuilding: 3 },
-  { id: 12, name: "象山步道", type: "CORNER", color: "#059669", icon: "⛰️", gridArea: "5 / 1", row: 4, col: 0, hasTree: true },
-
-  // 法巴總部與士林北投線 (Left Col: 13 -> 15)
-  { id: 13, name: "信義計畫區", type: "INVEST", price: 180000, color: "#0284c7", icon: "🏦", gridArea: "4 / 1", row: 3, col: 0, baseBuilding: 2 },
-  { id: 14, name: "法巴101總部", type: "INSURANCE", price: 60000, color: "#10b981", icon: "🛡️", gridArea: "3 / 1", row: 2, col: 0, baseBuilding: 3 },
-  { id: 15, name: "士林北投", type: "PROPERTY", price: 105000, color: "#e11d48", icon: "♨️", gridArea: "2 / 1", row: 1, col: 0, baseBuilding: 1, hasTree: true },
+const BOARD_TILE_DEFS: Omit<BoardTile, 'id' | 'row' | 'col' | 'gridArea'>[] = [
+  // 童年・求學 (Top Row)
+  { name: "呱呱落地", type: "START", color: "#f472b6", icon: "👶", model: LIFE_MODEL, baseBuilding: 1, hasTree: true },
+  { name: "上小學", type: "PROPERTY", price: 90000, color: "#fb923c", icon: "🎒", model: LIFE_MODEL, baseBuilding: 1 },
+  { name: "機會卡", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
+  { name: "考上大學", type: "INVEST", price: 110000, color: "#8b5cf6", icon: "🎓", model: LIFE_MODEL, baseBuilding: 1 },
+  { name: "出國留學", type: "PROPERTY", price: 130000, color: "#0ea5e9", icon: "✈️", model: LIFE_MODEL, baseBuilding: 1 },
+  { name: "第一份工作", type: "CORNER", color: "#0284c7", icon: "💼", model: LIFE_MODEL, baseBuilding: 2, bonus: 30000, landMsg: "領到人生第一份薪水" },
+  // 成家・立業 (Right Column)
+  { name: "考駕照開車", type: "RISK", color: "#ef4444", icon: "🚗", model: LIFE_MODEL },
+  { name: "步入禮堂", type: "PROPERTY", price: 150000, color: "#ec4899", icon: "💍", model: LIFE_MODEL, baseBuilding: 2, hasTree: true },
+  { name: "機會卡", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
+  { name: "買第一間房", type: "INVEST", price: 200000, color: "#b45309", icon: "🏠", model: LIFE_MODEL, baseBuilding: 2 },
+  { name: "寶寶誕生", type: "CORNER", color: "#f472b6", icon: "🍼", model: LIFE_MODEL, baseBuilding: 1, bonus: 20000, landMsg: "迎接新生命，領取育兒津貼", hasTree: true },
+  // 中年・家庭 (Bottom Row)
+  { name: "孩子上學", type: "PROPERTY", price: 120000, color: "#6366f1", icon: "📚", model: LIFE_MODEL, baseBuilding: 1 },
+  { name: "機會卡", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
+  { name: "升遷加薪", type: "INVEST", price: 180000, color: "#0284c7", icon: "📈", model: LIFE_MODEL, baseBuilding: 3 },
+  { name: "自行創業", type: "INVEST", price: 160000, color: "#10b981", icon: "🏪", model: LIFE_MODEL, baseBuilding: 2 },
+  { name: "光榮退休", type: "CORNER", color: "#059669", icon: "🏖️", model: LIFE_MODEL, baseBuilding: 1, bonus: 50000, landMsg: "光榮退休，領取退休金", hasTree: true },
+  // 樂齡・傳承 (Left Column)
+  { name: "保障規劃", type: "INSURANCE", price: 60000, color: "#10b981", icon: "🛡️", model: 14, baseBuilding: 3 },
+  { name: "機會卡", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
+  { name: "含飴弄孫", type: "PROPERTY", price: 105000, color: "#e11d48", icon: "👴", model: LIFE_MODEL, baseBuilding: 1, hasTree: true },
+  { name: "財富傳承", type: "PROPERTY", price: 90000, color: "#f97316", icon: "📜", model: LIFE_MODEL, baseBuilding: 1 },
 ];
+
+const BOARD_TILES: BoardTile[] = BOARD_TILE_DEFS.map((t, id) => {
+  const [row, col] = ringPos(id);
+  return { ...t, id, row, col, gridArea: `${row + 1} / ${col + 1}` };
+});
+
+const CAR_CRASH_TILE = BOARD_TILES.findIndex((t) => t.type === 'RISK');
+const FIRST_CHANCE_TILE = BOARD_TILES.findIndex((t) => t.type === 'CHANCE');
+const INITIAL_LEVELS: Record<number, number> = { 16: 3, 1: 2, 7: 2, 11: 2, 13: 3, 14: 2 };
+const INITIAL_OWNERS: Record<number, number> = { 1: 0, 7: 1, 11: 2, 13: 0, 14: 3 };
 
 // ==========================================
 // 7. CHANCE CARDS DATA & MULTIPLAYER TYPES
 // ==========================================
+type Insurer = '法國巴黎人壽' | '法國巴黎產險';
+
 interface ChanceCard {
   id: number;
   title: string;
   desc: string;
-  deltaMoney: number; // event loss (negative) or gain
-  insuredBonus?: number; // insurance payout / policyholder bonus
+  deltaMoney: number; // event loss (negative) or gain — game money, for illustration only
+  insuredBonus?: number; // insurance payout — game money, for illustration only
   icon: string;
   tag: string;
   scene: EventSceneKind;
-  claimName: string; // which coverage pays out
+  insurer?: Insurer; // company that sells the matching product
+  claimName: string; // real product name, as listed on the official website
+  coverage?: string; // coverage item, as listed on the official website
+  tip: string; // verified fact from the official website
 }
 
-// Every chance tile triggers an everyday-life insurance event
+// Official sources:
+//  法國巴黎人壽 https://life.cardif.com.tw  (傷害保險 a232、健康保險 a233、理賠程序 a314、關於我們 a1)
+//  法國巴黎產險 https://nonlife.cardif.com.tw (居家保險 a21、人身保險 a22、財產保險 a23)
+const TIP_15_DAYS = '法國巴黎人壽理賠程序：文件齊備後，保險人應於 15 天內給付理賠金。';
+const TIP_DIAGNOSIS = '申請理賠的「診斷證明書」須為正本，或加蓋醫院紅色印章的副本，不接受影印本。';
+const TIP_LIFE_HOTLINE = '法國巴黎人壽服務／申訴專線：0800-012-899。';
+const TIP_NONLIFE_HOTLINE = '法國巴黎產險服務／申訴專線：0800-266-288。';
+
 const CHANCE_CARDS: ChanceCard[] = [
   {
     id: 1,
     title: "過馬路被車撞了！",
-    desc: "綠燈過馬路，還是被闖紅燈的車子撞倒，腳踝骨折要開刀住院…",
+    desc: "綠燈過馬路，還是被闖紅燈的車子撞倒，受傷住院…",
     deltaMoney: -120000,
-    insuredBonus: 140000,
+    insuredBonus: 120000,
     icon: "🚗",
     tag: "意外風險",
     scene: "car",
-    claimName: "意外傷害險 + 住院日額",
+    insurer: "法國巴黎產險",
+    claimName: "永保平安傷害保險",
+    coverage: "傷害住院保險金（日額型、實支實付型、意外門診手術）",
+    tip: TIP_DIAGNOSIS,
   },
   {
     id: 2,
     title: "半夜急性盲腸炎",
     desc: "肚子痛到冒冷汗，救護車緊急送醫，開刀住院 5 天。",
     deltaMoney: -80000,
-    insuredBonus: 100000,
+    insuredBonus: 80000,
     icon: "🏥",
     tag: "醫療風險",
     scene: "hospital",
-    claimName: "住院醫療險",
+    insurer: "法國巴黎人壽",
+    claimName: "住院醫療保險",
+    coverage: "住院日額、手術、出院療養、門診醫療給付",
+    tip: TIP_15_DAYS,
   },
   {
     id: 3,
-    title: "颱風把窗戶吹破了",
-    desc: "強颱過境，家裡窗戶和冷氣室外機都被吹壞了。",
+    title: "颱風豪雨淹進家裡",
+    desc: "強颱過境，一樓淹水，家具和電器都泡水了。",
     deltaMoney: -60000,
-    insuredBonus: 60000,
+    insuredBonus: 50000,
     icon: "🌀",
     tag: "天災風險",
     scene: "typhoon",
-    claimName: "住宅險 + 颱風洪水附約",
+    insurer: "法國巴黎產險",
+    claimName: "住宅颱風及洪水災害補償保險",
+    coverage: "颱風、洪水災害補償",
+    tip: TIP_NONLIFE_HOTLINE,
   },
   {
     id: 4,
     title: "雨天踩到香蕉皮滑倒",
     desc: "捷運站外地板濕滑，一屁股坐下去，手腕骨折打石膏。",
     deltaMoney: -50000,
-    insuredBonus: 60000,
+    insuredBonus: 50000,
     icon: "🍌",
     tag: "意外風險",
     scene: "fall",
-    claimName: "意外醫療險",
+    insurer: "法國巴黎產險",
+    claimName: "個人傷害保險 傷害醫療保險給付附加條款（日額型）",
+    coverage: "傷害醫療住院給付（含骨折未住院）",
+    tip: '骨折申請理賠時，依案件可能需要附上 X 光片。',
   },
   {
     id: 5,
     title: "煮泡麵忘記關火",
-    desc: "鍋子燒乾冒煙，廚房被燻得黑漆漆，要重新裝潢。",
+    desc: "鍋子燒乾起火，廚房被燒得黑漆漆，要重新整修。",
     deltaMoney: -90000,
-    insuredBonus: 90000,
+    insuredBonus: 80000,
     icon: "🔥",
     tag: "居家風險",
     scene: "fire",
-    claimName: "住宅火險",
+    insurer: "法國巴黎產險",
+    claimName: "住宅火災保險",
+    coverage: "火災",
+    tip: TIP_NONLIFE_HOTLINE,
   },
   {
     id: 6,
-    title: "夜市吃壞肚子",
-    desc: "大腸包小腸太好吃，結果急性腸胃炎掛急診。",
+    title: "夜市吃到食物中毒",
+    desc: "路邊攤吃完上吐下瀉，送急診住院觀察。",
     deltaMoney: -30000,
-    insuredBonus: 35000,
+    insuredBonus: 30000,
     icon: "🍢",
-    tag: "醫療風險",
+    tag: "意外風險",
     scene: "food",
-    claimName: "實支實付醫療險",
+    insurer: "法國巴黎產險",
+    claimName: "永保平安傷害保險",
+    coverage: "食物中毒、住院慰問",
+    tip: TIP_DIAGNOSIS,
   },
   {
     id: 7,
-    title: "出國行李不見了",
-    desc: "人飛到東京，行李卻跑去曼谷，只好重買衣服和用品。",
+    title: "錢包和手機被偷了！",
+    desc: "逛街時被扒手摸走皮夾和手機，證件要補辦、信用卡還被盜刷。",
     deltaMoney: -40000,
-    insuredBonus: 45000,
-    icon: "🧳",
-    tag: "旅遊風險",
-    scene: "travel",
-    claimName: "旅平險 + 旅遊不便險",
+    insuredBonus: 35000,
+    icon: "👛",
+    tag: "財物風險",
+    scene: "theft",
+    insurer: "法國巴黎產險",
+    claimName: "個人皮件、證件及行動電話盜打賠償保險",
+    coverage: "皮件賠償、卡片或證件重置費用、卡片盜用或行動電話盜打費用",
+    tip: TIP_NONLIFE_HOTLINE,
   },
   {
     id: 8,
+    title: "陽台盆栽被風吹落",
+    desc: "盆栽掉下樓，砸壞樓下鄰居的機車，要負責賠償。",
+    deltaMoney: -50000,
+    insuredBonus: 50000,
+    icon: "🪴",
+    tag: "責任風險",
+    scene: "pot",
+    insurer: "法國巴黎產險",
+    claimName: "住宅第三人責任基本保險",
+    coverage: "住宅第三人責任",
+    tip: TIP_NONLIFE_HOTLINE,
+  },
+  {
+    id: 9,
+    title: "冰箱突然壞掉了",
+    desc: "冰箱過了原廠保固就罷工！幸好買的時候有加購延長保固。",
+    deltaMoney: -25000,
+    insuredBonus: 25000,
+    icon: "🧊",
+    tag: "財物風險",
+    scene: "appliance",
+    insurer: "法國巴黎產險",
+    claimName: "產品延長保固費用保險",
+    coverage: "費用賠償保險金",
+    tip: TIP_NONLIFE_HOTLINE,
+  },
+  {
+    id: 10,
     title: "健康檢查全部滿分！",
-    desc: "年度健檢報告全綠燈！保戶還能額外領健康回饋金。",
-    deltaMoney: 10000,
-    insuredBonus: 20000,
+    desc: "年度健檢報告全綠燈，公司發健康獎金！保持健康也是最好的保障。",
+    deltaMoney: 20000,
     icon: "💯",
     tag: "健康獎勵",
     scene: "health",
-    claimName: "保戶健康回饋",
+    claimName: "無需理賠",
+    tip: TIP_LIFE_HOTLINE,
   },
 ];
 
@@ -1693,10 +1910,10 @@ const INITIAL_PLAYERS: PlayerState[] = CHARACTER_MODELS.map((preset, idx) => ({
 
 // Slight 2x2 offset (%) on a tile so 4 characters standing on the same tile never overlap
 const PLAYER_TILE_OFFSETS: [number, number][] = [
-  [-4.2, -3.8],
-  [4.2, -3.8],
-  [-4.2, 3.8],
-  [4.2, 3.8],
+  [-3.4, -3.1],
+  [3.4, -3.1],
+  [-3.4, 3.1],
+  [3.4, 3.1],
 ];
 
 export default function App() {
@@ -1706,8 +1923,8 @@ export default function App() {
   const maxTurns = 12; // 3 full rounds for 4 players
 
   // tileId -> { level, ownerIdx }
-  const [ownedTiles, setOwnedTiles] = useState<Record<number, number>>({ 14: 3, 1: 2, 5: 2, 9: 2, 11: 3, 13: 2 });
-  const [tileOwners, setTileOwners] = useState<Record<number, number>>({ 14: 0, 1: 0, 5: 1, 9: 2, 11: 0, 13: 3 });
+  const [ownedTiles, setOwnedTiles] = useState<Record<number, number>>(INITIAL_LEVELS);
+  const [tileOwners, setTileOwners] = useState<Record<number, number>>(INITIAL_OWNERS);
 
   const [diceRoll, setDiceRoll] = useState(3);
   const [spinCount, setSpinCount] = useState(0);
@@ -1721,16 +1938,12 @@ export default function App() {
   const [setupIdx, setSetupIdx] = useState(0);
   const [insuranceChoices, setInsuranceChoices] = useState<(boolean | null)[]>(CHARACTER_MODELS.map(() => null));
 
-  // Full-screen car-crash animation for the 忠孝復興 risk tile
-  const [showCrashScene, setShowCrashScene] = useState(false);
-
   const [cameraMode, setCameraMode] = useState<'iso' | 'closeup' | 'top'>('iso');
   const [customRotZ, setCustomRotZ] = useState(-28);
   const [customRotX, setCustomRotX] = useState(52);
   const isDraggingRef = useRef(false);
   const lastMouseXRef = useRef(0);
 
-  const [islandState, setIslandState] = useState<'compact' | 'accident_alert' | 'claim_details' | 'ai_mentor'>('compact');
   const [isHighlightCar, setIsHighlightCar] = useState(false);
   const [pendingBuyTile, setPendingBuyTile] = useState<BoardTile | null>(null);
 
@@ -1759,9 +1972,10 @@ export default function App() {
   };
 
   const getCharacterFacingAngleZ = (pos: number) => {
-    if (pos >= 0 && pos < 4) return 90;
-    if (pos >= 4 && pos < 8) return 0;
-    if (pos >= 8 && pos < 12) return -90;
+    const side = BOARD_SIZE - 1;
+    if (pos < side) return 90;
+    if (pos < side * 2) return 0;
+    if (pos < side * 3) return -90;
     return 180;
   };
 
@@ -1780,16 +1994,16 @@ export default function App() {
   };
 
   const rollDiceAndMove = () => {
-    if (gamePhase !== 'playing' || isRolling || isWalking || showCrashScene || chanceModalStep !== 'closed' || showSettlementModal) return;
+    if (gamePhase !== 'playing' || isRolling || isWalking || chanceModalStep !== 'closed' || showSettlementModal) return;
     setPendingBuyTile(null);
     setIsRolling(true);
     setSpinCount((prev) => prev + 1);
     setLogMessage(`🎲 【${currentPlayer.preset.name}】擲骰中...`);
 
-    // Make it easy to hit Chance (tile 3) or Car Crash (tile 6) on early rolls
-    let targetSteps = Math.floor(Math.random() * 5) + 1;
-    if (currentPlayer.position === 0 && activeTurnIdx === 0) targetSteps = 3; // Land on 東門永康 (Chance!)
-    else if (currentPlayer.position === 3 && activeTurnIdx === 0) targetSteps = 3; // Land on 忠孝復興 (Car Crash!)
+    // Make it easy to hit a Chance tile or the Car Crash tile on early rolls
+    let targetSteps = Math.floor(Math.random() * 6) + 1;
+    if (currentPlayer.position === 0 && activeTurnIdx === 0) targetSteps = FIRST_CHANCE_TILE; // Land on 機會卡
+    else if (currentPlayer.position === FIRST_CHANCE_TILE && activeTurnIdx === 0) targetSteps = CAR_CRASH_TILE - FIRST_CHANCE_TILE; // Land on 考駕照開車 (Car Crash!)
 
     setDiceRoll(targetSteps);
 
@@ -1818,7 +2032,7 @@ export default function App() {
         currentStepCount++;
 
         if (curr === 0) {
-          setLogMessage(`🎉 【${currentPlayer.preset.name}】經過台北車站 +$50,000`);
+          setLogMessage(`🎉 【${currentPlayer.preset.name}】又長大一歲，領生日紅包 +$50,000`);
         }
 
         setTimeout(() => {
@@ -1842,22 +2056,23 @@ export default function App() {
 
     if (tile.type === "CHANCE") {
       // Open Interactive 3-Card Chance Draw Modal!
-      setLogMessage(`🃏 【${pName}】抵達 ${tile.name}！請抽取一張機會卡`);
+      setLogMessage(`🃏 【${pName}】踩到機會卡格子！請抽取一張機會卡`);
       setChanceModalStep('pick');
       return;
     }
 
-    if (tile.type === "RISK" && tileIndex === 6) {
-      playCarCrash(currentPlayer.hasInsurance);
+    if (tile.type === "RISK") {
+      setIsHighlightCar(true);
+      runEvent(CHANCE_CARDS.find((c) => c.scene === 'car')!);
       return;
     }
 
     if (tile.type === "INSURANCE") {
       if (!currentPlayer.hasInsurance && tile.price && currentPlayer.money >= tile.price) {
         setPendingBuyTile(tile);
-        setLogMessage(`🛡️ 【${pName}】來到法巴101總部，要不要現在補買保險？`);
+        setLogMessage(`🛡️ 【${pName}】來到人生保障規劃站，要補買法國巴黎保險嗎？`);
       } else {
-        setLogMessage(`🛡️ 【${pName}】是法巴保戶，保障持續中！`);
+        setLogMessage(`🛡️ 【${pName}】檢視人生保障規劃，法國巴黎保險保障持續中！`);
         setTimeout(() => advanceTurn(), 900);
       }
       return;
@@ -1867,7 +2082,7 @@ export default function App() {
       const owner = tileOwners[tileIndex];
       if (owner === undefined && tile.price && currentPlayer.money >= tile.price) {
         setPendingBuyTile(tile);
-        setLogMessage(`🏙️ 【${pName}】抵達 ${tile.name}，可置產或結束回合`);
+        setLogMessage(`🏙️ 【${pName}】迎來人生大事「${tile.name}」，要投入嗎？`);
       } else if (owner !== undefined && owner !== activeTurnIdx) {
         const rent = 25000;
         const ownerName = players[owner].preset.name;
@@ -1878,16 +2093,26 @@ export default function App() {
             return p;
           })
         );
-        setLogMessage(`💸 【${pName}】支付 ${tile.name} 租金 $${rent.toLocaleString()} 給【${ownerName}】`);
+        setLogMessage(`💸 【${pName}】參與「${tile.name}」支付費用 $${rent.toLocaleString()} 給【${ownerName}】`);
         setTimeout(() => advanceTurn(), 1000);
       } else {
         setOwnedTiles((prev) => ({ ...prev, [tileIndex]: Math.min((prev[tileIndex] || 1) + 1, 3) }));
         setPlayers((prev) =>
           prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, money: p.money + 20000 } : p))
         );
-        setLogMessage(`📈 【${pName}】於旗下 ${tile.name} 領取收益 +$20,000`);
+        setLogMessage(`📈 【${pName}】經營「${tile.name}」有成，收益 +$20,000`);
         setTimeout(() => advanceTurn(), 900);
       }
+      return;
+    }
+
+    if (tile.bonus) {
+      const bonus = tile.bonus;
+      setPlayers((prev) =>
+        prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, money: p.money + bonus } : p))
+      );
+      setLogMessage(`${tile.icon} 【${pName}】${tile.landMsg ?? tile.name} +$${bonus.toLocaleString()}`);
+      setTimeout(() => advanceTurn(), 1000);
       return;
     }
 
@@ -1895,33 +2120,12 @@ export default function App() {
     setTimeout(() => advanceTurn(), 900);
   };
 
-  // Car crash on 忠孝復興: play the cartoon scene, then settle (insured -> Dynamic Island claim flow)
-  const playCarCrash = (insured: boolean) => {
-    const pName = currentPlayer.preset.name;
-    setIsHighlightCar(true);
-    setShowCrashScene(true);
-    setLogMessage(`🚗💥 【${pName}】在忠孝復興路口被車撞了！`);
-    setTimeout(() => {
-      setShowCrashScene(false);
-      if (insured) {
-        setLogMessage(`🚨 【${pName}】遭遇車禍！點擊上方動態島啟動法巴理賠`);
-        setIslandState('accident_alert');
-      } else {
-        setPlayers((prev) =>
-          prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, money: p.money - 180000 } : p))
-        );
-        setLogMessage(`💸 【${pName}】沒有買保險，車禍醫藥費自付 -$180,000！`);
-        setTimeout(() => {
-          setIsHighlightCar(false);
-          advanceTurn();
-        }, 1400);
-      }
-    }, EVENT_SCENE_MS);
-  };
-
   // Pick a Chance Card -> play the event animation -> reveal result
   const handlePickChanceCard = () => {
-    const randomCard = CHANCE_CARDS[Math.floor(Math.random() * CHANCE_CARDS.length)];
+    runEvent(CHANCE_CARDS[Math.floor(Math.random() * CHANCE_CARDS.length)]);
+  };
+
+  const runEvent = (randomCard: ChanceCard) => {
     setDrawnChanceCard(randomCard);
     setChanceModalStep('animating');
     setLogMessage(`${randomCard.icon} 【${currentPlayer.preset.name}】${randomCard.title}`);
@@ -1943,6 +2147,7 @@ export default function App() {
   const handleCloseChanceModal = () => {
     setChanceModalStep('closed');
     setDrawnChanceCard(null);
+    setIsHighlightCar(false);
     advanceTurn();
   };
 
@@ -1963,17 +2168,9 @@ export default function App() {
     );
     setOwnedTiles((prev) => ({ ...prev, [pendingBuyTile.id]: 2 }));
     setTileOwners((prev) => ({ ...prev, [pendingBuyTile.id]: activeTurnIdx }));
-    setLogMessage(`🏙️ 【${currentPlayer.preset.name}】成功收購 ${pendingBuyTile.name}！`);
+    setLogMessage(`🏙️ 【${currentPlayer.preset.name}】完成人生大事「${pendingBuyTile.name}」！`);
     setPendingBuyTile(null);
     setTimeout(() => advanceTurn(), 700);
-  };
-
-  const handleClaimPayout = () => {
-    setIslandState('claim_details');
-    setPlayers((prev) =>
-      prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, money: p.money - 300000 + 350000 } : p))
-    );
-    setLogMessage(`🛡️ 【${currentPlayer.preset.name}】獲法巴意外險理賠，淨資產 +$50,000！`);
   };
 
   // Answer the "buy insurance?" question for the current setup player
@@ -1993,19 +2190,18 @@ export default function App() {
       )
     );
     setGamePhase('playing');
-    setLogMessage(`輪到【${INITIAL_PLAYERS[0].preset.name}】擲骰暢遊台北市`);
+    setLogMessage(`輪到【${INITIAL_PLAYERS[0].preset.name}】擲骰展開人生旅程`);
   };
 
   const handleReset = () => {
     setGamePhase('setup');
     setSetupIdx(0);
     setInsuranceChoices(CHARACTER_MODELS.map(() => null));
-    setShowCrashScene(false);
     setPlayers(INITIAL_PLAYERS);
     setActiveTurnIdx(0);
     setTurnCount(0);
-    setOwnedTiles({ 14: 3, 1: 2, 5: 2, 9: 2, 11: 3, 13: 2 });
-    setTileOwners({ 14: 0, 1: 0, 5: 1, 9: 2, 11: 0, 13: 3 });
+    setOwnedTiles(INITIAL_LEVELS);
+    setTileOwners(INITIAL_OWNERS);
     setDiceRoll(3);
     setIsRolling(false);
     setIsWalking(false);
@@ -2014,21 +2210,21 @@ export default function App() {
     setChanceModalStep('closed');
     setDrawnChanceCard(null);
     setShowSettlementModal(false);
-    setIslandState('compact');
     setIsHighlightCar(false);
     setLogMessage("先決定每位玩家要不要買保險吧！");
   };
 
   const getBoard3DTransform = () => {
     if (cameraMode === 'top') {
-      return `rotateX(16deg) rotateZ(0deg) scale(0.96)`;
+      return `rotateX(16deg) rotateZ(0deg) scale(0.9)`;
     }
     if (cameraMode === 'closeup') {
-      const offsetX = (2 - currentTile.col) * 20;
-      const offsetY = (2 - currentTile.row) * 20;
+      const mid = (BOARD_SIZE - 1) / 2;
+      const offsetX = (mid - currentTile.col) * 20;
+      const offsetY = (mid - currentTile.row) * 20;
       return `rotateX(58deg) rotateZ(${customRotZ}deg) scale(1.18) translate3d(${offsetX}px, ${offsetY}px, 0px)`;
     }
-    return `rotateX(${customRotX}deg) rotateZ(${customRotZ}deg) scale(0.96)`;
+    return `rotateX(${customRotX}deg) rotateZ(${customRotZ}deg) scale(0.86)`;
   };
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -2065,7 +2261,7 @@ export default function App() {
       {/* ======================================================== */}
       {/* SMARTPHONE FRAME CONTAINER (Sky Blue Daylight City Theme)*/}
       {/* ======================================================== */}
-      <div className="relative w-full max-w-[440px] h-[860px] bg-gradient-to-b from-[#fff4e6] via-[#fdeef2] to-[#e8f6f0] rounded-[52px] border-[7px] border-white shadow-[0_0_0_3px_#f3d9c6,0_25px_60px_-15px_rgba(180,110,70,0.45)] p-3 flex flex-col justify-between overflow-hidden">
+      <div className="relative w-full max-w-[500px] h-[880px] bg-gradient-to-b from-[#fff4e6] via-[#fdeef2] to-[#e8f6f0] rounded-[52px] border-[7px] border-white shadow-[0_0_0_3px_#f3d9c6,0_25px_60px_-15px_rgba(180,110,70,0.45)] p-3 flex flex-col justify-between overflow-hidden">
         
         {/* Soft Daylight Sun & Cloud Glow */}
         <div className="absolute -top-12 -right-12 w-56 h-56 bg-white/50 rounded-full blur-2xl pointer-events-none" />
@@ -2075,107 +2271,6 @@ export default function App() {
         {/* TOP: DYNAMIC ISLAND & 4-PLAYER LIVE SCOREBOARD           */}
         {/* ======================================================== */}
         <div className="w-full flex flex-col items-center z-50">
-          <div
-            className={`bg-slate-950 text-white transition-all duration-500 ease-out border shadow-xl relative ${
-              islandState === 'compact'
-                ? 'w-[175px] h-[30px] rounded-full border-slate-800 flex items-center justify-between px-3'
-                : islandState === 'accident_alert'
-                ? 'w-[365px] h-[54px] rounded-[26px] border-red-500 bg-red-950 shadow-red-500/40 animate-pulse flex items-center justify-between px-4 cursor-pointer'
-                : islandState === 'claim_details'
-                ? 'w-[375px] h-[250px] rounded-[30px] border-emerald-500/80 bg-slate-950/98 shadow-emerald-500/30 p-4 flex flex-col justify-between'
-                : 'w-[375px] h-[220px] rounded-[30px] border-indigo-400/80 bg-slate-950/98 shadow-indigo-500/30 p-4 flex flex-col justify-between'
-            }`}
-          >
-            {/* 1. COMPACT */}
-            {islandState === 'compact' && (
-              <>
-                <div className="flex items-center gap-1.5">
-                  <Icons.Shield className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-[10.5px] font-semibold text-white">法巴守護 • 回合 {turnCount + 1}/{maxTurns}</span>
-                </div>
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              </>
-            )}
-
-            {/* 2. ACCIDENT ALERT */}
-            {islandState === 'accident_alert' && (
-              <div className="w-full flex items-center justify-between" onClick={handleClaimPayout}>
-                <div className="flex items-center gap-2">
-                  <Icons.CarCrash className="w-5 h-5 text-red-400" />
-                  <div>
-                    <div className="text-xs font-bold text-red-200">重大車禍 (-$300,000)</div>
-                    <div className="text-[10px] text-red-300/80">點擊啟動法巴意外險</div>
-                  </div>
-                </div>
-                <span className="text-[11px] bg-red-600 text-white font-bold px-3 py-1 rounded-full">
-                  理賠 ➔
-                </span>
-              </div>
-            )}
-
-            {/* 3. CLAIM DETAILS */}
-            {islandState === 'claim_details' && (
-              <div className="w-full h-full flex flex-col justify-between">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-xs font-bold text-emerald-400">
-                  <span className="flex items-center gap-1.5">
-                    <Icons.Shield className="w-4 h-4" /> 法巴意外醫療理賠
-                  </span>
-                  <span className="text-red-400">車禍 -$300K</span>
-                </div>
-
-                <div className="bg-slate-900/90 rounded-xl p-2.5 space-y-1.5 border border-slate-800 text-[11px]">
-                  <div className="flex justify-between text-slate-300">
-                    <span>骨折手術與住院給付</span>
-                    <span className="text-emerald-400 font-bold">+$200,000</span>
-                  </div>
-                  <div className="flex justify-between text-slate-300">
-                    <span>復健期失能補償金</span>
-                    <span className="text-emerald-400 font-bold">+$150,000</span>
-                  </div>
-                </div>
-
-                <div className="bg-emerald-950/70 border border-emerald-500/40 rounded-xl px-3 py-2 flex items-center justify-between">
-                  <span className="text-xs font-bold text-emerald-300">免變賣城市房產 • 淨結算</span>
-                  <span className="text-sm font-black text-emerald-300">+$50,000</span>
-                </div>
-
-                <button
-                  onClick={() => setIslandState('ai_mentor')}
-                  className="w-full py-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-1 cursor-pointer"
-                >
-                  <Icons.Sparkles className="w-3.5 h-3.5" />
-                  <span>AI 理專話術重點 ➔</span>
-                </button>
-              </div>
-            )}
-
-            {/* 4. AI MENTOR */}
-            {islandState === 'ai_mentor' && (
-              <div className="w-full h-full flex flex-col justify-between">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-300 pb-1.5 border-b border-slate-800">
-                  <Icons.Sparkles className="w-4 h-4 text-indigo-400" />
-                  <span>AI 銷售賦能金句</span>
-                </div>
-
-                <div className="bg-indigo-950/40 border border-indigo-800/40 rounded-xl p-3 text-xs text-slate-200 leading-relaxed">
-                  「一次突發車禍就可能迫使房產與 ETF 認賠變現；法巴意外防護就是守住城市資產的<b>防波堤</b>！」
-                </div>
-
-                <button
-                  onClick={() => {
-                    setIslandState('compact');
-                    setIsHighlightCar(false);
-                    advanceTurn();
-                  }}
-                  className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-1 cursor-pointer"
-                >
-                  <Icons.Check className="w-3.5 h-3.5" />
-                  <span>完成理賠 • 換下一位</span>
-                </button>
-              </div>
-            )}
-          </div>
-
           {/* 4-PLAYER LIVE SCOREBOARD & CAMERA BAR */}
           <div className="w-full grid grid-cols-4 gap-1 px-0.5 mt-1.5">
             {players.map((p, idx) => {
@@ -2241,7 +2336,7 @@ export default function App() {
               onClick={() => setShowSettlementModal(true)}
               className="px-2.5 py-1 rounded-full bg-amber-300 hover:bg-amber-200 text-[#5b3a29] font-black text-[10px] btn-pop flex items-center gap-1 cursor-pointer transition"
             >
-              <span>🏆 結算資產勝負</span>
+              <span>🏆 第 {Math.min(turnCount + 1, maxTurns)}/{maxTurns} 回合 • 結算</span>
             </button>
           </div>
         </div>
@@ -2250,22 +2345,23 @@ export default function App() {
         {/* CENTER STAGE: RICH 3D METROPOLIS CITY MONOPOLY BOARD     */}
         {/* ======================================================== */}
         <div
-          className="relative my-auto w-full h-[450px] flex items-center justify-center scene-perspective overflow-visible cursor-grab active:cursor-grabbing"
+          className="relative my-auto w-full h-[520px] flex items-center justify-center scene-perspective overflow-visible cursor-grab active:cursor-grabbing"
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
         >
           {/* City Island Base with Asphalt Highway Ring */}
           <div
             style={{ transform: getBoard3DTransform() }}
-            className="w-[376px] h-[376px] bg-gradient-to-br from-lime-200 via-green-200 to-emerald-200 rounded-[32px] p-2.5 border-4 border-white board-slab-3d transition-transform duration-500 ease-out relative"
+            className="w-[440px] h-[440px] bg-gradient-to-br from-lime-200 via-green-200 to-emerald-200 rounded-[32px] p-2.5 border-4 border-white board-slab-3d transition-transform duration-500 ease-out relative"
           >
             {/* 5x5 City Grid + Rich Central Park */}
-            <div className="grid grid-cols-5 grid-rows-5 gap-1.5 w-full h-full relative preserve-3d">
+            <div className="grid grid-cols-6 grid-rows-6 gap-1.5 w-full h-full relative preserve-3d">
               {BOARD_TILES.map((tile) => {
                 const isHere = currentPlayer.position === tile.id;
-                const isAccident = tile.id === 6;
+                const isAccident = tile.id === CAR_CRASH_TILE;
                 const buildingLevel = ownedTiles[tile.id] || tile.baseBuilding || 0;
                 const ownerIdx = tileOwners[tile.id];
+                const isChance = tile.type === 'CHANCE';
 
                 return (
                   <div
@@ -2276,6 +2372,8 @@ export default function App() {
                         ? 'bg-gradient-to-b from-pink-50 to-white border-pink-300 tile-3d-active z-20'
                         : isAccident && isHighlightCar
                         ? 'bg-gradient-to-b from-red-100 to-red-50 border-red-500 tile-3d-danger animate-pulse'
+                        : isChance
+                        ? 'bg-gradient-to-b from-amber-200 to-yellow-100 border-amber-400 tile-3d'
                         : 'bg-[#fffaf3] border-white tile-3d'
                     }`}
                   >
@@ -2295,7 +2393,11 @@ export default function App() {
                     {/* City Sidewalk + Icon + District Name */}
                     <div className="flex flex-col items-center justify-center flex-1 text-center">
                       <span className="text-sm leading-none mb-0.5">{tile.icon}</span>
-                      <span className="font-extrabold text-[9px] text-[#5b3a29] leading-none tracking-tight">
+                      <span
+                        className={`font-extrabold leading-none tracking-tight ${
+                          isChance ? 'text-[10px] text-amber-700' : 'text-[9px] text-[#5b3a29]'
+                        }`}
+                      >
                         {tile.name}
                       </span>
                     </div>
@@ -2307,20 +2409,21 @@ export default function App() {
                       <span className="w-1 h-0.5 bg-white" />
                     </div>
 
-                    {/* Diverse 3D Taipei Landmark Icon Rising from Every Block */}
+                    {/* 3D Life-Event Milestone / Chance Block Rising from Every Tile */}
                     <div
                       style={{ transform: "translateZ(4px)" }}
                       className="absolute top-2.5 right-3 preserve-3d pointer-events-none z-30"
                     >
                       <True3DTileLandmark
-                        tileId={tile.id}
+                        tileId={tile.model}
                         level={buildingLevel}
                         color={tile.color}
+                        icon={tile.icon}
                       />
                     </div>
 
                     {/* 3D Volumetric Street Tree on Green Blocks */}
-                    {tile.hasTree && tile.id !== 5 && (
+                    {tile.hasTree && tile.model !== 5 && (
                       <div
                         style={{ transform: "translateZ(4px)" }}
                         className="absolute bottom-2 left-1.5 preserve-3d pointer-events-none z-30"
@@ -2336,7 +2439,7 @@ export default function App() {
               {/* CENTRAL CITY PARK, CANAL RIVER & SKYLINE PLAZA           */}
               {/* ======================================================== */}
               <div
-                style={{ gridArea: "2 / 2 / 5 / 5" }}
+                style={{ gridArea: `2 / 2 / ${BOARD_SIZE} / ${BOARD_SIZE}` }}
                 className="bg-gradient-to-br from-[#d9f5e5] via-[#fff6e0] to-[#dff1fb] rounded-3xl p-2.5 border-4 border-white flex flex-col justify-between items-center text-center shadow-[inset_0_4px_15px_rgba(14,165,233,0.25)] relative preserve-3d"
               >
                 {/* Winding Sky-Blue City River / Canal across Central Park */}
@@ -2411,7 +2514,7 @@ export default function App() {
                       >
                         {pendingBuyTile.type === 'INSURANCE'
                           ? `🛡️ 補買保險 (-$${pendingBuyTile.price! / 1000}K)`
-                          : `置產 ${pendingBuyTile.name} (-$${pendingBuyTile.price! / 1000}K)`}
+                          : `投入 ${pendingBuyTile.name} (-$${pendingBuyTile.price! / 1000}K)`}
                       </button>
                       <button
                         onClick={() => advanceTurn()}
@@ -2423,7 +2526,7 @@ export default function App() {
                   ) : (
                     <button
                       onClick={rollDiceAndMove}
-                      disabled={isRolling || isWalking || showCrashScene || islandState !== 'compact' || chanceModalStep !== 'closed'}
+                      disabled={isRolling || isWalking || chanceModalStep !== 'closed'}
                       className="w-full py-2 bg-gradient-to-r from-rose-300 to-orange-300 hover:from-rose-200 hover:to-orange-200 disabled:opacity-40 rounded-full font-black text-white text-xs btn-pop cursor-pointer"
                     >
                       {isRolling ? "擲骰中..." : isWalking ? "前進中..." : `輪到【${currentPlayer.preset.name}】擲骰`}
@@ -2458,8 +2561,9 @@ export default function App() {
                 const tile = BOARD_TILES[p.position];
                 const isTurn = activeTurnIdx === idx;
                 const [offX, offY] = PLAYER_TILE_OFFSETS[idx];
-                const leftPct = tile.col * 20 + 10 + (isTurn ? 0 : offX);
-                const topPct = tile.row * 20 + 10 + (isTurn ? 0 : offY);
+                const cell = 100 / BOARD_SIZE;
+                const leftPct = (tile.col + 0.5) * cell + (isTurn ? 0 : offX);
+                const topPct = (tile.row + 0.5) * cell + (isTurn ? 0 : offY);
                 const charJumpZ = isTurn && hopProgress ? 36 : 12;
 
                 return (
@@ -2488,7 +2592,7 @@ export default function App() {
                       preset={p.preset}
                       isWalking={isTurn && isWalking}
                       facingAngleZ={getCharacterFacingAngleZ(p.position)}
-                      isShocked={p.position === 6 && isHighlightCar}
+                      isShocked={p.position === CAR_CRASH_TILE && isHighlightCar}
                       scale={isTurn ? 1.02 : 0.78}
                     />
                   </div>
@@ -2558,14 +2662,15 @@ export default function App() {
 
                   <InsuranceOutcomeFx protectedByInsurance={insured || !isLoss} />
 
+
                   <div className={`text-sm font-black ${insured ? 'text-emerald-600' : isLoss ? 'text-rose-500' : 'text-amber-600'}`}>
                     {insured
                       ? isLoss
                         ? '還好有買保險！法巴幫你理賠 🎉'
-                        : '保戶專屬加碼回饋 🎉'
+                        : '好消息 🎉'
                       : isLoss
                       ? '沒有保險…只能自己掏腰包 😢'
-                      : '好消息！不過保戶能領更多喔'}
+                      : '好消息 🎉'}
                   </div>
 
                   <div className="bg-white rounded-2xl p-3 border-2 border-[#f3d9c6] text-xs space-y-1.5 text-left">
@@ -2575,17 +2680,38 @@ export default function App() {
                         {drawnChanceCard.deltaMoney >= 0 ? '+' : '-'}${Math.abs(drawnChanceCard.deltaMoney).toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex justify-between text-[#8a5a44]">
-                      <span>🛡️ {drawnChanceCard.claimName}</span>
-                      <span className={`font-black ${insured ? 'text-emerald-600' : 'text-slate-400'}`}>
-                        {insured ? `+$${bonus.toLocaleString()}` : '未投保 $0'}
-                      </span>
-                    </div>
+                    {drawnChanceCard.insurer ? (
+                      <div className="flex justify-between gap-2 text-[#8a5a44]">
+                        <span className="leading-snug">
+                          🛡️ {drawnChanceCard.insurer}
+                          <br />
+                          <span className="font-bold">「{drawnChanceCard.claimName}」</span>
+                        </span>
+                        <span className={`font-black shrink-0 ${insured ? 'text-emerald-600' : 'text-slate-400'}`}>
+                          {insured ? `+$${bonus.toLocaleString()}` : '未投保 $0'}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex justify-between text-[#8a5a44]">
+                        <span>🛡️ 保險</span>
+                        <span className="font-black text-slate-400">無需理賠</span>
+                      </div>
+                    )}
+                    {drawnChanceCard.coverage && (
+                      <div className="text-[10px] text-[#a1745a]">保障項目：{drawnChanceCard.coverage}</div>
+                    )}
                     <div className="flex justify-between pt-1.5 border-t border-dashed border-[#f3d9c6] text-[#5b3a29] font-black">
                       <span>資產變動</span>
                       <span className={total >= 0 ? 'text-emerald-600' : 'text-rose-500'}>
                         {total >= 0 ? '+' : '-'}${Math.abs(total).toLocaleString()}
                       </span>
+                    </div>
+                  </div>
+
+                  <div className="bg-amber-50 border-2 border-amber-100 rounded-2xl px-3 py-2 text-[10.5px] text-[#8a5a44] text-left leading-snug">
+                    💡 <b>理賠小知識：</b>{drawnChanceCard.tip}
+                    <div className="text-[9px] text-[#c09a80] mt-1">
+                      商品資訊來源：法國巴黎人壽／產險官網。遊戲金額為示意，實際理賠依保單條款。
                     </div>
                   </div>
 
@@ -2598,24 +2724,6 @@ export default function App() {
                 </div>
               );
             })()}
-          </div>
-        )}
-
-        {/* ======================================================== */}
-        {/* CAR CRASH SCENE (忠孝復興 risk tile)                     */}
-        {/* ======================================================== */}
-        {showCrashScene && (
-          <div className="absolute inset-0 bg-[#5b3a29]/45 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="w-full max-w-[360px] card-cute rounded-[32px] p-4 text-center space-y-3 animate-card-in">
-              <div className="inline-block px-3 py-0.5 rounded-full bg-rose-100 text-rose-500 text-[10px] font-black">
-                🚦 忠孝復興路口
-              </div>
-              <div className="text-lg font-black text-[#5b3a29]">【{currentPlayer.preset.name}】被車撞了！</div>
-              <EventScene kind="car" preset={currentPlayer.preset} />
-              <p className="text-xs text-[#8a5a44]">
-                {currentPlayer.hasInsurance ? '🛡️ 有法巴意外險，等等可以申請理賠！' : '😰 沒有保險，醫藥費要自己付…'}
-              </p>
-            </div>
           </div>
         )}
 
@@ -2649,12 +2757,22 @@ export default function App() {
                     <div className="text-lg font-black text-[#5b3a29]">
                       【{preset.name}】要購買保險嗎？
                     </div>
-                    <div className="bg-white rounded-2xl p-3 border-2 border-[#f3d9c6] text-left text-[11px] text-[#8a5a44] space-y-1">
-                      <div className="font-black text-emerald-600 mb-1">🛡️ 法巴生活安心保 • 保費 ${INSURANCE_PREMIUM.toLocaleString()}</div>
-                      <div>🚗 車禍、跌倒等意外傷害理賠</div>
-                      <div>🏥 住院、手術、急診醫療理賠</div>
-                      <div>🏠 颱風、火災居家損失理賠</div>
-                      <div>✈️ 旅遊行李遺失不便理賠</div>
+                    <div className="bg-white rounded-2xl p-3 border-2 border-[#f3d9c6] text-left text-[10.5px] text-[#8a5a44] space-y-1.5">
+                      <div className="font-black text-emerald-600">🛡️ 法巴保障組合 • 遊戲保費 ${INSURANCE_PREMIUM.toLocaleString()}</div>
+                      <div>
+                        <b className="text-[#5b3a29]">法國巴黎人壽</b>
+                        <div>🏥 住院醫療保險：住院日額、手術、門診</div>
+                      </div>
+                      <div>
+                        <b className="text-[#5b3a29]">法國巴黎產險</b>
+                        <div>🚗 永保平安傷害保險：傷害住院、食物中毒</div>
+                        <div>🦴 個人傷害保險 傷害醫療（含骨折未住院）</div>
+                        <div>🏠 住宅火災／颱風洪水／第三人責任保險</div>
+                        <div>👛 個人皮件、證件及行動電話盜打賠償保險</div>
+                      </div>
+                      <div className="text-[9px] text-[#c09a80] pt-1 border-t border-dashed border-[#f3d9c6]">
+                        商品名稱取自 life.cardif.com.tw 與 nonlife.cardif.com.tw；遊戲中的保費與理賠金額為示意，實際依保單條款。
+                      </div>
                     </div>
                     <div className="grid grid-cols-2 gap-2.5">
                       <button
@@ -2722,7 +2840,7 @@ export default function App() {
           <div className="absolute inset-0 bg-[#5b3a29]/45 backdrop-blur-md z-50 flex items-center justify-center p-4">
             <div className="w-full max-w-[380px] card-cute rounded-[32px] p-5 space-y-3 animate-card-in">
               <div className="text-center">
-                <div className="text-xs font-black text-amber-600">🏆 台北大富翁 • 最終資產勝負榜</div>
+                <div className="text-xs font-black text-amber-600">🏆 人生大富翁 • 最終資產勝負榜</div>
                 <div className="text-base font-black text-slate-900 mt-0.5">
                   🎉 冠軍：{rankedPlayers[0].preset.name}（總資產 ${rankedPlayers[0].totalAssets.toLocaleString()}）
                 </div>
@@ -2769,7 +2887,7 @@ export default function App() {
               </div>
 
               <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-[11px] text-emerald-900 leading-snug">
-                💡 <b>勝負關鍵總結：</b> 開局就買<b>法巴保險</b>的角色，遇到車禍、住院、颱風、火災這些生活意外時都有理賠，資產不會一夕歸零！
+                💡 <b>勝負關鍵總結：</b> 開局就買<b>法巴保險</b>的角色，遇到車禍、住院、颱風、火災、失竊這些生活意外時都有理賠，資產不會一夕歸零！<br /><span className="text-[9.5px] text-emerald-700/80">法國巴黎保險遍佈全球 30 個地區 • 人壽 0800-012-899 • 產險 0800-266-288</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
@@ -2798,34 +2916,19 @@ export default function App() {
             {logMessage}
           </div>
 
-          <div className="grid grid-cols-3 gap-1.5">
+          <div className="grid grid-cols-2 gap-1.5">
             <button
               onClick={() => {
-                if (gamePhase !== 'playing' || showCrashScene || isWalking || isRolling || chanceModalStep !== 'closed') return;
+                if (gamePhase !== 'playing' || isWalking || isRolling || chanceModalStep !== 'closed') return;
                 setPendingBuyTile(null);
                 setPlayers((prev) =>
-                  prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, position: 3 } : p))
+                  prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, position: FIRST_CHANCE_TILE } : p))
                 );
                 setChanceModalStep('pick');
               }}
               className="py-2 bg-amber-300 hover:bg-amber-200 text-[#5b3a29] rounded-full text-[11px] font-black btn-pop flex items-center justify-center gap-1 cursor-pointer"
             >
               <span>🎁 抽機會卡</span>
-            </button>
-
-            <button
-              onClick={() => {
-                if (gamePhase !== 'playing' || showCrashScene || isWalking || isRolling || islandState !== 'compact') return;
-                setPendingBuyTile(null);
-                setPlayers((prev) =>
-                  prev.map((p, idx) => (idx === activeTurnIdx ? { ...p, position: 6 } : p))
-                );
-                playCarCrash(currentPlayer.hasInsurance);
-              }}
-              className="py-2 bg-rose-400 hover:bg-rose-300 text-white rounded-full text-[11px] font-bold btn-pop flex items-center justify-center gap-1 cursor-pointer"
-            >
-              <Icons.CarCrash className="w-3.5 h-3.5 text-white" />
-              <span>車禍演示</span>
             </button>
 
             <button

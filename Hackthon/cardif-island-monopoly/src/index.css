@@ -145,6 +145,12 @@ body {
   from { transform: translateY(0) rotate(0deg); opacity: 1; }
   to { transform: translateY(150px) rotate(400deg); opacity: 0; }
 }
+@keyframes evWaterRise { from { height: 0%; } to { height: 30%; } }
+@keyframes evPotFall {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(14px, -4px) rotate(20deg); }
+  100% { transform: translate(70px, 118px) rotate(200deg); }
+}
 @keyframes evTint { from { opacity: 0; } to { opacity: 0.55; } }
 
 /* Result screen: insurance shield drop & money fly-away */
