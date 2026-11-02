@@ -86,32 +86,38 @@ function VoxelBox3D({
       </div>
       <div
         style={{ width: w, height: h, background: cBack, transform: `rotateY(180deg) translateZ(${d / 2}px)` }}
-        className={`absolute left-0 top-0 ${rounded} ${border} overflow-hidden flex items-center justify-center brightness-90`}
+        className={`absolute left-0 top-0 ${rounded} ${border} overflow-hidden flex items-center justify-center`}
       >
         {backContent}
+        <div className="absolute inset-0 bg-black/10 pointer-events-none" />
       </div>
       <div
         style={{ width: d, height: h, left: (w - d) / 2, top: 0, background: cRight, transform: `rotateY(90deg) translateZ(${w / 2}px)` }}
-        className={`absolute ${rounded} ${border} overflow-hidden flex items-center justify-center brightness-95`}
+        className={`absolute ${rounded} ${border} overflow-hidden flex items-center justify-center`}
       >
         {rightContent}
+        <div className="absolute inset-0 bg-black/5 pointer-events-none" />
       </div>
       <div
         style={{ width: d, height: h, left: (w - d) / 2, top: 0, background: cLeft, transform: `rotateY(-90deg) translateZ(${w / 2}px)` }}
-        className={`absolute ${rounded} ${border} overflow-hidden flex items-center justify-center brightness-80`}
+        className={`absolute ${rounded} ${border} overflow-hidden flex items-center justify-center`}
       >
         {leftContent}
+        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
       </div>
       <div
         style={{ width: w, height: d, left: 0, top: (h - d) / 2, background: cTop, transform: `rotateX(90deg) translateZ(${h / 2}px)` }}
-        className={`absolute ${rounded} ${border} overflow-hidden flex items-center justify-center brightness-110`}
+        className={`absolute ${rounded} ${border} overflow-hidden flex items-center justify-center`}
       >
         {topContent}
+        <div className="absolute inset-0 bg-white/10 pointer-events-none" />
       </div>
       <div
         style={{ width: w, height: d, left: 0, top: (h - d) / 2, background: cBottom, transform: `rotateX(-90deg) translateZ(${h / 2}px)` }}
-        className={`absolute ${rounded} ${border} overflow-hidden brightness-50`}
-      />
+        className={`absolute ${rounded} ${border} overflow-hidden`}
+      >
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
     </div>
   );
 }
@@ -173,7 +179,7 @@ function True3DDice({
         style={{
           transform: `translateZ(${-elevationZ + 4}px) scale(${isRolling ? 0.5 : 0.95})`,
         }}
-        className="absolute inset-0 bg-sky-950/45 rounded-full blur-[4px] transition-all duration-500 pointer-events-none"
+        className="absolute inset-0 rounded-full bg-[radial-gradient(closest-side,rgba(8,47,73,0.45),transparent)] transition-transform duration-500 pointer-events-none"
       />
 
       {/* 6-Sided 3D Rotating Cube */}
@@ -308,7 +314,7 @@ function True3DCharacter({
       }}
       className="relative preserve-3d transition-transform duration-300"
     >
-      <div className={`relative preserve-3d flex flex-col items-center ${!isWalking ? 'animate-3d-bob' : ''}`}>
+      <div className={`relative preserve-3d flex flex-col items-center`}>
         {/* 1. 3D HAIR TOP */}
         <div style={{ transform: "translateY(-44px)" }} className="absolute preserve-3d">
           <VoxelBox3D
@@ -506,692 +512,6 @@ function True3DCharacter({
     </div>
   );
 }
-
-// ==========================================
-// 5. DIVERSE 3D TAIPEI LANDMARK ICONS (16 Custom 3D Models!)
-// Every tile gets a unique 6-sided volumetric 3D miniature icon
-// ==========================================
-function True3DTileLandmark({ tileId, level, color, icon = '' }: { tileId: number; level: number; color: string; icon?: string }) {
-  const wrap = "preserve-3d pointer-events-none flex flex-col items-center";
-
-  switch (tileId) {
-    // 0: 台北車站 (3D High-Speed Rail Train + Station Canopy)
-    case 0:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* Classic Red/Brown Pitched Station Roof */}
-          <div style={{ transform: "translateY(-18px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={18} h={4} d={14} colors={{ front: "#dc2626", top: "#ef4444", left: "#991b1b", right: "#991b1b" }} />
-          </div>
-          {/* Station Hall */}
-          <div style={{ transform: "translateY(-14px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={15}
-              h={8}
-              d={11}
-              colors={{ front: "#f8fafc", left: "#cbd5e1", right: "#cbd5e1", top: "#e2e8f0" }}
-              frontContent={<div className="text-[5px] font-black text-sky-700">TPE</div>}
-            />
-          </div>
-          {/* 3D THSR Bullet Train in Front */}
-          <div style={{ transform: "translateZ(7px) translateY(-6px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={16}
-              h={5}
-              d={6}
-              colors={{ front: "#ffffff", top: "#f97316", left: "#f97316", right: "#ea580c" }}
-              frontContent={<div className="w-full h-1.5 bg-orange-500 flex justify-around"><span className="w-2 h-1 bg-sky-900" /><span className="w-2 h-1 bg-sky-900" /></div>}
-            />
-          </div>
-        </div>
-      );
-
-    // 1: 西門町 (3D Ximen Red House Octagon + Neon Billboard)
-    case 1:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* Neon Signboard */}
-          <div style={{ transform: "translateY(-24px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={12}
-              h={6}
-              d={4}
-              colors={{ front: "#ec4899", top: "#f472b6", left: "#be185d", right: "#be185d" }}
-              frontContent={<span className="text-[5px] font-black text-yellow-200">XIMEN</span>}
-            />
-          </div>
-          {/* Red Brick Historic Building */}
-          <div style={{ transform: "translateY(-18px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={15}
-              h={12}
-              d={13}
-              colors={{ front: "#b91c1c", left: "#991b1b", right: "#7f1d1d", top: "#dc2626" }}
-              frontContent={
-                <div className="flex gap-1">
-                  <div className="w-2 h-4 bg-amber-200 rounded-t-full" />
-                  <div className="w-2 h-4 bg-amber-200 rounded-t-full" />
-                </div>
-              }
-            />
-          </div>
-        </div>
-      );
-
-    // 2: 中正紀念堂 (3D White Marble Hall + Blue Octagonal Roof)
-    case 2:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* Gold Finial */}
-          <div style={{ transform: "translateY(-25px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={4} h={3} d={4} colors={{ front: "#fbbf24", top: "#fde047" }} />
-          </div>
-          {/* Iconic Royal Blue Roof */}
-          <div style={{ transform: "translateY(-22px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={16} h={6} d={16} colors={{ front: "#1d4ed8", top: "#2563eb", left: "#1e40af", right: "#1e3a8a" }} />
-          </div>
-          {/* White Marble Hall Body */}
-          <div style={{ transform: "translateY(-16px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={14}
-              h={10}
-              d={14}
-              colors={{ front: "#ffffff", left: "#f1f5f9", right: "#e2e8f0", top: "#f8fafc" }}
-              frontContent={<div className="w-3 h-5 bg-slate-700 rounded-t-sm mt-auto" />}
-            />
-          </div>
-        </div>
-      );
-
-    // 3: 東門永康 (3D Giant Bamboo Steamer Basket Tower & Golden Boba)
-    case 3:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* Top Lid */}
-          <div style={{ transform: "translateY(-20px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={11} h={3} d={11} colors={{ front: "#fcd34d", top: "#fef08a", left: "#f59e0b", right: "#d97706" }} />
-          </div>
-          {/* Steamer Tier 2 */}
-          <div style={{ transform: "translateY(-17px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={14}
-              h={5}
-              d={14}
-              colors={{ front: "#f59e0b", top: "#ffffff", left: "#d97706", right: "#b45309" }}
-              frontContent={<div className="w-full h-1 bg-amber-800/40" />}
-            />
-          </div>
-          {/* Steamer Tier 1 */}
-          <div style={{ transform: "translateY(-12px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={14}
-              h={6}
-              d={14}
-              colors={{ front: "#d97706", top: "#f59e0b", left: "#b45309", right: "#92400e" }}
-              frontContent={<div className="w-full h-1 bg-amber-950/40" />}
-            />
-          </div>
-        </div>
-      );
-
-    // 4: 台大醫院 (3D Medical Center + 3D Red Cross Rooftop Sign)
-    case 4:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* 3D Red Cross Sign */}
-          <div style={{ transform: "translateY(-26px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={8}
-              h={7}
-              d={4}
-              colors={{ front: "#ffffff", top: "#f8fafc", left: "#cbd5e1", right: "#cbd5e1" }}
-              frontContent={<span className="text-[8px] font-black text-red-600 leading-none">✚</span>}
-            />
-          </div>
-          {/* Hospital Building */}
-          <div style={{ transform: "translateY(-19px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={15}
-              h={14}
-              d={13}
-              colors={{ front: "#f8fafc", left: "#e0f2fe", right: "#bae6fd", top: "#38bdf8" }}
-              frontContent={
-                <div className="grid grid-cols-2 gap-1 p-1">
-                  <div className="w-2 h-2 bg-cyan-400" /><div className="w-2 h-2 bg-cyan-400" />
-                  <div className="w-2 h-2 bg-cyan-400" /><div className="w-2 h-2 bg-cyan-400" />
-                </div>
-              }
-            />
-          </div>
-        </div>
-      );
-
-    // 5: 大安森林 (3D Multi-Tree Lush Forest Sanctuary)
-    case 5:
-      return (
-        <div className="preserve-3d pointer-events-none relative">
-          <div style={{ transform: "translateX(-5px)" }} className="absolute preserve-3d">
-            <True3DTree scale={1.15} />
-          </div>
-          <div style={{ transform: "translateX(6px) translateZ(4px)" }} className="absolute preserve-3d">
-            <True3DTree scale={0.85} />
-          </div>
-        </div>
-      );
-
-    // 6: 忠孝復興 (3D Traffic Signal Gantry + Dual Colliding Sports Cars)
-    case 6:
-      return (
-        <div className="preserve-3d pointer-events-none relative">
-          {/* 3D Traffic Light Pole */}
-          <div style={{ transform: "rotateX(-90deg) translateX(-7px)" }} className="absolute preserve-3d">
-            <div style={{ transform: "translateY(-22px)" }} className="absolute preserve-3d">
-              <VoxelBox3D
-                w={9}
-                h={4}
-                d={4}
-                colors={{ front: "#1e293b", top: "#334155" }}
-                frontContent={
-                  <div className="flex gap-0.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  </div>
-                }
-              />
-            </div>
-            <div style={{ transform: "translateY(-18px)" }} className="absolute preserve-3d">
-              <VoxelBox3D w={2.5} h={14} d={2.5} colors={{ front: "#475569" }} />
-            </div>
-          </div>
-          {/* Two 3D Cars in Intersection */}
-          <div style={{ transform: "translateX(2px)" }} className="absolute preserve-3d">
-            <True3DMiniCar color="#ef4444" rotZ={-30} />
-          </div>
-          <div style={{ transform: "translateX(-4px) translateY(5px)" }} className="absolute preserve-3d">
-            <True3DMiniCar color="#3b82f6" rotZ={45} />
-          </div>
-        </div>
-      );
-
-    // 7: 松山機場 (3D Passenger Jet Airplane + Control Tower)
-    case 7:
-      return (
-        <div style={{ transform: "rotateZ(-25deg) rotateX(-90deg)" }} className={wrap}>
-          {/* Tail Fin */}
-          <div style={{ transform: "translateY(-17px) translateZ(-5px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={3} h={6} d={5} colors={{ front: "#0284c7", left: "#0ea5e9", right: "#0284c7" }} />
-          </div>
-          {/* Airplane Wings */}
-          <div style={{ transform: "translateY(-11px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={22} h={2} d={6} colors={{ front: "#e2e8f0", top: "#ffffff", left: "#94a3b8", right: "#94a3b8" }} />
-          </div>
-          {/* Airplane Fuselage */}
-          <div style={{ transform: "translateY(-13px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={6}
-              h={5}
-              d={18}
-              colors={{ front: "#ffffff", top: "#f8fafc", left: "#38bdf8", right: "#0284c7" }}
-              frontContent={<div className="w-4 h-1.5 bg-sky-900 rounded-t-sm" />}
-            />
-          </div>
-        </div>
-      );
-
-    // 8: 大直美麗華 (3D Giant Rotating Ferris Wheel)
-    case 8:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* Ferris Wheel Rim */}
-          <div style={{ transform: "translateY(-28px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={18}
-              h={18}
-              d={4}
-              rounded="rounded-full"
-              colors={{ front: "#ec4899", back: "#db2777", left: "#be185d", right: "#be185d", top: "#f472b6" }}
-              frontContent={
-                <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center bg-sky-200/40">
-                  <div className="w-3 h-3 rounded-full bg-yellow-300 border border-white" />
-                </div>
-              }
-            />
-          </div>
-          {/* Support Base */}
-          <div style={{ transform: "translateY(-11px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={10} h={9} d={8} colors={{ front: "#475569", left: "#334155", right: "#334155" }} />
-          </div>
-        </div>
-      );
-
-    // 9: 內湖科園 (3D Cyber Glass Tech Hub + Satellite Dish)
-    case 9:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          <div style={{ transform: "translateY(-29px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={7} h={4} d={7} colors={{ front: "#38bdf8", top: "#bae6fd" }} />
-          </div>
-          <div style={{ transform: "translateY(-25px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={15}
-              h={20}
-              d={14}
-              colors={{ front: "#4f46e5", left: "#4338ca", right: "#3730a3", top: "#818cf8" }}
-              frontContent={
-                <div className="w-full h-full p-1 flex flex-col justify-around">
-                  <div className="w-full h-1.5 bg-cyan-300 rounded-full" />
-                  <div className="w-full h-1.5 bg-cyan-300 rounded-full" />
-                  <div className="w-full h-1.5 bg-cyan-300 rounded-full" />
-                </div>
-              }
-            />
-          </div>
-        </div>
-      );
-
-    // 10: 南港展覽館 (3D Elevated MRT Train on Viaduct)
-    case 10:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* MRT Train Car */}
-          <div style={{ transform: "translateY(-19px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={18}
-              h={6}
-              d={8}
-              colors={{ front: "#0284c7", top: "#f8fafc", left: "#0369a1", right: "#0369a1" }}
-              frontContent={
-                <div className="flex gap-1 px-1">
-                  <div className="w-2.5 h-2.5 bg-sky-100 rounded-[1px]" />
-                  <div className="w-2.5 h-2.5 bg-sky-100 rounded-[1px]" />
-                  <div className="w-2.5 h-2.5 bg-sky-100 rounded-[1px]" />
-                </div>
-              }
-            />
-          </div>
-          {/* Viaduct Track Beam */}
-          <div style={{ transform: "translateY(-13px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={20} h={3} d={10} colors={{ front: "#94a3b8", top: "#cbd5e1", left: "#64748b", right: "#64748b" }} />
-          </div>
-          {/* Concrete Pillar */}
-          <div style={{ transform: "translateY(-10px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={6} h={8} d={6} colors={{ front: "#64748b", left: "#475569", right: "#475569" }} />
-          </div>
-        </div>
-      );
-
-    // 11: 台北101 (3D Multi-Tiered Bamboo Skyscraper Icon)
-    case 11:
-      return (
-        <div className="preserve-3d pointer-events-none">
-          <True3DLandmarkSkyscraper />
-        </div>
-      );
-
-    // 12: 象山步道 (3D Stepped Emerald Mountain Peaks)
-    case 12:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* Main Peak */}
-          <div style={{ transform: "translateY(-22px) translateX(-2px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={11} h={18} d={11} colors={{ front: "#059669", left: "#047857", right: "#065f46", top: "#6ee7b7" }} />
-          </div>
-          {/* Secondary Peak */}
-          <div style={{ transform: "translateY(-14px) translateX(6px) translateZ(3px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={10} h={11} d={10} colors={{ front: "#10b981", left: "#059669", right: "#047857", top: "#a7f3d0" }} />
-          </div>
-        </div>
-      );
-
-    // 13: 信義計畫區 (3D Twin Golden & Sapphire Financial Towers)
-    case 13:
-      return (
-        <div className="preserve-3d pointer-events-none">
-          <True3DCityBuilding level={Math.max(2, level)} color={color} />
-        </div>
-      );
-
-    // 14: 法巴101總部 (3D Emerald BNP Paribas Cardif Shield HQ Tower)
-    case 14:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* Glowing 3D Shield Crest on Roof */}
-          <div style={{ transform: "translateY(-38px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={11}
-              h={9}
-              d={5}
-              colors={{ front: "#10b981", top: "#6ee7b7", left: "#059669", right: "#059669" }}
-              frontContent={<span className="text-[7px] font-black text-white">🛡️</span>}
-            />
-          </div>
-          {/* HQ Emerald Glass Tower */}
-          <div style={{ transform: "translateY(-29px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={16}
-              h={25}
-              d={15}
-              colors={{ front: "#059669", left: "#047857", right: "#065f46", top: "#34d399" }}
-              frontContent={
-                <div className="flex flex-col items-center justify-between py-1 h-full">
-                  <span className="text-[5.5px] font-black text-white bg-emerald-900/60 px-1 rounded">CARDIF</span>
-                  <div className="grid grid-cols-2 gap-0.5">
-                    <div className="w-2 h-2 bg-emerald-100" /><div className="w-2 h-2 bg-emerald-100" />
-                    <div className="w-2 h-2 bg-emerald-100" /><div className="w-2 h-2 bg-emerald-100" />
-                  </div>
-                </div>
-              }
-            />
-          </div>
-        </div>
-      );
-
-    // 15: 士林北投 (3D Wooden Hot Spring Villa + Rising Steam Cube)
-    case 15:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          {/* Rising White Steam Cube */}
-          <div style={{ transform: "translateY(-23px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={6} h={4} d={6} colors={{ front: "#ffffff", top: "#f8fafc", left: "#e2e8f0", right: "#e2e8f0" }} />
-          </div>
-          {/* Dark Slate Japanese-style Roof */}
-          <div style={{ transform: "translateY(-17px)" }} className="absolute preserve-3d">
-            <VoxelBox3D w={17} h={4} d={15} colors={{ front: "#334155", top: "#475569", left: "#1e293b", right: "#1e293b" }} />
-          </div>
-          {/* Warm Cedar Wood Bathhouse */}
-          <div style={{ transform: "translateY(-13px)" }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={14}
-              h={9}
-              d={12}
-              colors={{ front: "#b45309", left: "#92400e", right: "#78350f", top: "#d97706" }}
-              frontContent={<div className="w-4 h-4 rounded-full bg-red-600 text-[6px] text-white font-bold flex items-center justify-center">♨</div>}
-            />
-          </div>
-        </div>
-      );
-
-    // Life-event milestone: colored pedestal (grows with level) + floating emoji cube
-    case LIFE_MODEL: {
-      const baseH = 4 + Math.max(1, level) * 3;
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          <div style={{ transform: `translateY(${-baseH}px)` }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={14}
-              h={baseH}
-              d={14}
-              rounded="rounded-[3px]"
-              colors={{ front: color, back: color, left: color, right: color, top: "#fff7ed" }}
-            />
-          </div>
-          <div style={{ transform: `translateY(${-baseH - 14}px)`, animation: 'evBob 2s ease-in-out infinite' }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={12}
-              h={12}
-              d={12}
-              rounded="rounded-[4px]"
-              border="border border-white/90"
-              colors={{ front: "#ffffff", back: "#f8fafc", left: "#f1f5f9", right: "#e2e8f0", top: "#ffffff" }}
-              frontContent={<span className="text-[8px] leading-none">{icon}</span>}
-              rightContent={<span className="text-[8px] leading-none">{icon}</span>}
-            />
-          </div>
-        </div>
-      );
-    }
-
-    // Dedicated chance tiles: floating golden "?" gift block
-    case CHANCE_MODEL:
-      return (
-        <div style={{ transform: "rotateX(-90deg)" }} className={wrap}>
-          <div style={{ transform: "translateY(-24px)", animation: 'evBob 1.6s ease-in-out infinite' }} className="absolute preserve-3d">
-            <VoxelBox3D
-              w={14}
-              h={14}
-              d={14}
-              rounded="rounded-[4px]"
-              border="border-2 border-white/80"
-              colors={{ front: "#fbbf24", back: "#f59e0b", left: "#f59e0b", right: "#d97706", top: "#fde68a" }}
-              frontContent={<span className="text-[10px] font-black text-white drop-shadow">?</span>}
-              rightContent={<span className="text-[10px] font-black text-white">?</span>}
-              topContent={<div className="w-full h-1 bg-rose-400" />}
-            />
-          </div>
-        </div>
-      );
-
-    default:
-      return <True3DCityBuilding level={Math.max(1, level)} color={color} />;
-  }
-}
-
-// Keep True3DCityBuilding for Central Park & multi-building clusters
-function True3DCityBuilding({ level, color }: { level: number; color: string }) {
-  const mainH = 12 + level * 8;
-  const sideH = 8 + level * 4;
-  return (
-    <div style={{ transform: "rotateX(-90deg)" }} className="preserve-3d pointer-events-none flex items-end">
-      {/* Main High-Rise Tower */}
-      <div style={{ transform: `translateY(${-mainH}px)` }} className="preserve-3d">
-        <VoxelBox3D
-          w={13}
-          h={mainH}
-          d={13}
-          colors={{
-            front: color,
-            back: color,
-            left: color,
-            right: color,
-            top: "#f8fafc",
-          }}
-          frontContent={
-            <div className="grid grid-cols-2 gap-0.5 p-0.5 w-full h-full place-items-center bg-white/10">
-              {Array.from({ length: Math.max(2, level * 2) }).map((_, i) => (
-                <div key={i} className="w-1.5 h-1.5 bg-sky-100 rounded-[1px]" />
-              ))}
-            </div>
-          }
-          rightContent={
-            <div className="grid grid-cols-2 gap-0.5 p-0.5 w-full h-full place-items-center bg-black/10">
-              {Array.from({ length: Math.max(2, level * 2) }).map((_, i) => (
-                <div key={i} className="w-1.5 h-1.5 bg-sky-100 rounded-[1px]" />
-              ))}
-            </div>
-          }
-          topContent={
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 border border-white text-[5px] font-bold text-white flex items-center justify-center">
-              H
-            </div>
-          }
-        />
-      </div>
-
-      {/* Side Annex Building + 3D Street Tree for Rich City Block Look */}
-      {level >= 2 && (
-        <div style={{ transform: `translateX(9px) translateZ(3px) translateY(${-sideH}px)` }} className="preserve-3d absolute">
-          <VoxelBox3D
-            w={9}
-            h={sideH}
-            d={9}
-            colors={{
-              front: "#e2e8f0",
-              back: "#cbd5e1",
-              left: "#cbd5e1",
-              right: "#94a3b8",
-              top: color,
-            }}
-            frontContent={
-              <div className="w-1.5 h-1.5 bg-amber-300 rounded-full" />
-            }
-          />
-        </div>
-      )}
-    </div>
-  );
-}
-
-// 3D Volumetric Park Tree (Trunk + 2-tier 3D Foliage Canopy)
-function True3DTree({ scale = 1 }: { scale?: number }) {
-  return (
-    <div
-      style={{ transform: `rotateX(-90deg) scale(${scale})` }}
-      className="preserve-3d pointer-events-none flex flex-col items-center"
-    >
-      {/* Top Crown */}
-      <div style={{ transform: "translateY(-19px)" }} className="absolute preserve-3d">
-        <VoxelBox3D
-          w={8}
-          h={5}
-          d={8}
-          colors={{
-            front: "#34d399",
-            back: "#10b981",
-            left: "#10b981",
-            right: "#059669",
-            top: "#6ee7b7",
-          }}
-        />
-      </div>
-      {/* Lower Canopy */}
-      <div style={{ transform: "translateY(-14px)" }} className="absolute preserve-3d">
-        <VoxelBox3D
-          w={12}
-          h={7}
-          d={12}
-          colors={{
-            front: "#10b981",
-            back: "#059669",
-            left: "#059669",
-            right: "#047857",
-            top: "#34d399",
-          }}
-        />
-      </div>
-      {/* Tree Trunk */}
-      <div style={{ transform: "translateY(-7px)" }} className="absolute preserve-3d">
-        <VoxelBox3D
-          w={4}
-          h={7}
-          d={4}
-          colors={{
-            front: "#92400e",
-            back: "#78350f",
-            left: "#78350f",
-            right: "#451a03",
-            top: "#78350f",
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-// 3D Taipei 101 / Cardif Financial Landmark Skyscraper in Central Park
-function True3DLandmarkSkyscraper() {
-  return (
-    <div style={{ transform: "rotateX(-90deg)" }} className="preserve-3d pointer-events-none flex flex-col items-center">
-      {/* Spire */}
-      <div style={{ transform: "translateY(-44px)" }} className="absolute preserve-3d">
-        <VoxelBox3D
-          w={3}
-          h={8}
-          d={3}
-          colors={{ front: "#38bdf8", top: "#fde047" }}
-        />
-      </div>
-      {/* Top Tier */}
-      <div style={{ transform: "translateY(-36px)" }} className="absolute preserve-3d">
-        <VoxelBox3D
-          w={12}
-          h={10}
-          d={12}
-          colors={{
-            front: "#0ea5e9",
-            back: "#0284c7",
-            left: "#0284c7",
-            right: "#0369a1",
-            top: "#7dd3fc",
-          }}
-          frontContent={<div className="w-2 h-2 rounded-full bg-emerald-300" />}
-        />
-      </div>
-      {/* Middle Tier */}
-      <div style={{ transform: "translateY(-26px)" }} className="absolute preserve-3d">
-        <VoxelBox3D
-          w={15}
-          h={12}
-          d={15}
-          colors={{
-            front: "#0284c7",
-            back: "#0369a1",
-            left: "#0369a1",
-            right: "#075985",
-            top: "#38bdf8",
-          }}
-          frontContent={
-            <div className="grid grid-cols-2 gap-0.5 p-0.5">
-              <div className="w-1.5 h-1.5 bg-sky-100" /><div className="w-1.5 h-1.5 bg-sky-100" />
-              <div className="w-1.5 h-1.5 bg-sky-100" /><div className="w-1.5 h-1.5 bg-sky-100" />
-            </div>
-          }
-        />
-      </div>
-      {/* Base Podium */}
-      <div style={{ transform: "translateY(-14px)" }} className="absolute preserve-3d">
-        <VoxelBox3D
-          w={18}
-          h={14}
-          d={18}
-          colors={{
-            front: "#0369a1",
-            back: "#075985",
-            left: "#075985",
-            right: "#0c4a6e",
-            top: "#0ea5e9",
-          }}
-          frontContent={
-            <div className="text-[5px] font-black text-emerald-300 tracking-tighter">BNP</div>
-          }
-        />
-      </div>
-    </div>
-  );
-}
-
-// 3D Miniature Voxel Car on Street / Intersection
-function True3DMiniCar({ color = "#ef4444", rotZ = 0 }: { color?: string; rotZ?: number }) {
-  return (
-    <div style={{ transform: `rotateZ(${rotZ}deg) rotateX(-90deg)` }} className="preserve-3d pointer-events-none flex flex-col items-center">
-      {/* Cabin */}
-      <div style={{ transform: "translateY(-9px)" }} className="absolute preserve-3d">
-        <VoxelBox3D
-          w={8}
-          h={4}
-          d={8}
-          colors={{ front: "#bae6fd", back: "#7dd3fc", left: color, right: color, top: color }}
-        />
-      </div>
-      {/* Car Body */}
-      <div style={{ transform: "translateY(-5px)" }} className="absolute preserve-3d">
-        <VoxelBox3D
-          w={10}
-          h={5}
-          d={14}
-          colors={{ front: color, back: color, left: color, right: color, top: color }}
-          frontContent={
-            <div className="w-full flex justify-between px-0.5">
-              <div className="w-1.5 h-1 bg-yellow-300" />
-              <div className="w-1.5 h-1 bg-yellow-300" />
-            </div>
-          }
-        />
-      </div>
-    </div>
-  );
-}
-
 // ==========================================
 // 5b. CUTE 2D CHIBI AVATAR (used in setup screen, scoreboard & event scenes)
 // ==========================================
@@ -1653,7 +973,7 @@ function InsuranceOutcomeFx({ protectedByInsurance }: { protectedByInsurance: bo
 }
 
 // ==========================================
-// 6. LIFE JOURNEY BOARD DATA (20 life-stage tiles, 4 dedicated chance tiles)
+// 6. LIFE JOURNEY BOARD DATA (24 life-stage tiles, 4 dedicated chance tiles)
 // ==========================================
 interface BoardTile {
   id: number;
@@ -1665,15 +985,15 @@ interface BoardTile {
   gridArea: string;
   row: number;
   col: number;
-  model: number; // which 3D landmark model to show (see True3DTileLandmark)
+  model: number; // legacy model id (3D tile blocks were removed)
   baseBuilding?: number;
   hasTree?: boolean;
   bonus?: number; // money gained when landing on a corner life event
   landMsg?: string;
 }
 
-// 6x6 ring board: 20 tiles. Corners are 0, 5, 10, 15.
-const BOARD_SIZE = 6;
+// 7x7 ring board: 24 tiles. Corners are 0, 6, 12, 18.
+const BOARD_SIZE = 7;
 const ringPos = (i: number): [number, number] => {
   const n = BOARD_SIZE - 1;
   if (i <= n) return [0, i]; // top row, left -> right
@@ -1692,23 +1012,27 @@ const BOARD_TILE_DEFS: Omit<BoardTile, 'id' | 'row' | 'col' | 'gridArea'>[] = [
   { name: "Chance", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
   { name: "College", type: "INVEST", price: 110000, color: "#8b5cf6", icon: "🎓", model: LIFE_MODEL, baseBuilding: 1 },
   { name: "Abroad", type: "PROPERTY", price: 130000, color: "#0ea5e9", icon: "✈️", model: LIFE_MODEL, baseBuilding: 1 },
+  { name: "Internship", type: "PROPERTY", price: 100000, color: "#14b8a6", icon: "🧑‍💻", model: LIFE_MODEL, baseBuilding: 1 },
   { name: "First Job", type: "CORNER", color: "#0284c7", icon: "💼", model: LIFE_MODEL, baseBuilding: 2, bonus: 30000, landMsg: "got their first paycheck" },
   // Family & Career (Right Column)
   { name: "Driving", type: "RISK", color: "#ef4444", icon: "🚗", model: LIFE_MODEL },
   { name: "Wedding", type: "PROPERTY", price: 150000, color: "#ec4899", icon: "💍", model: LIFE_MODEL, baseBuilding: 2, hasTree: true },
   { name: "Chance", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
   { name: "New Home", type: "INVEST", price: 200000, color: "#b45309", icon: "🏠", model: LIFE_MODEL, baseBuilding: 2 },
+  { name: "Side Hustle", type: "INVEST", price: 140000, color: "#a855f7", icon: "💡", model: LIFE_MODEL, baseBuilding: 1 },
   { name: "New Baby", type: "CORNER", color: "#f472b6", icon: "🍼", model: LIFE_MODEL, baseBuilding: 1, bonus: 20000, landMsg: "welcomed a baby and got a childcare bonus", hasTree: true },
   // Midlife & Family (Bottom Row)
   { name: "Kids' School", type: "PROPERTY", price: 120000, color: "#6366f1", icon: "📚", model: LIFE_MODEL, baseBuilding: 1 },
   { name: "Chance", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
   { name: "Promotion", type: "INVEST", price: 180000, color: "#0284c7", icon: "📈", model: LIFE_MODEL, baseBuilding: 3 },
   { name: "Startup", type: "INVEST", price: 160000, color: "#10b981", icon: "🏪", model: LIFE_MODEL, baseBuilding: 2 },
+  { name: "Checkup", type: "PROPERTY", price: 110000, color: "#22c55e", icon: "🩺", model: LIFE_MODEL, baseBuilding: 1 },
   { name: "Retire", type: "CORNER", color: "#059669", icon: "🏖️", model: LIFE_MODEL, baseBuilding: 1, bonus: 50000, landMsg: "retired and collected a pension", hasTree: true },
   // Golden Years & Legacy (Left Column)
   { name: "Insurance", type: "INSURANCE", price: 60000, color: "#10b981", icon: "🛡️", model: 14, baseBuilding: 3 },
   { name: "Chance", type: "CHANCE", color: "#f59e0b", icon: "🃏", model: CHANCE_MODEL },
   { name: "Grandkids", type: "PROPERTY", price: 105000, color: "#e11d48", icon: "👴", model: LIFE_MODEL, baseBuilding: 1, hasTree: true },
+  { name: "World Trip", type: "PROPERTY", price: 125000, color: "#0891b2", icon: "🌍", model: LIFE_MODEL, baseBuilding: 1 },
   { name: "Legacy", type: "PROPERTY", price: 90000, color: "#f97316", icon: "📜", model: LIFE_MODEL, baseBuilding: 1 },
 ];
 
@@ -1719,8 +1043,8 @@ const BOARD_TILES: BoardTile[] = BOARD_TILE_DEFS.map((t, id) => {
 
 const CAR_CRASH_TILE = BOARD_TILES.findIndex((t) => t.type === 'RISK');
 const FIRST_CHANCE_TILE = BOARD_TILES.findIndex((t) => t.type === 'CHANCE');
-const INITIAL_LEVELS: Record<number, number> = { 16: 3, 1: 2, 7: 2, 11: 2, 13: 3, 14: 2 };
-const INITIAL_OWNERS: Record<number, number> = { 1: 0, 7: 1, 11: 2, 13: 0, 14: 3 };
+const INITIAL_LEVELS: Record<number, number> = { 19: 3, 1: 2, 8: 2, 13: 2, 15: 3, 16: 2 };
+const INITIAL_OWNERS: Record<number, number> = { 1: 0, 8: 1, 13: 2, 15: 0, 16: 3 };
 
 // ==========================================
 // 7. CHANCE CARDS DATA & MULTIPLAYER TYPES
@@ -1921,10 +1245,10 @@ const INITIAL_PLAYERS: PlayerState[] = buildPlayers(0, CHARACTER_MODELS[0].name)
 
 // Slight 2x2 offset (%) on a tile so 4 characters standing on the same tile never overlap
 const PLAYER_TILE_OFFSETS: [number, number][] = [
-  [-3.4, -3.1],
-  [3.4, -3.1],
-  [-3.4, 3.1],
-  [3.4, 3.1],
+  [-2.9, -2.7],
+  [2.9, -2.7],
+  [-2.9, 2.7],
+  [2.9, 2.7],
 ];
 
 // CPU decision helpers
@@ -1958,8 +1282,9 @@ export default function App() {
   const [insuranceChoices, setInsuranceChoices] = useState<boolean[]>([false, false, false, false]);
 
   const [cameraMode, setCameraMode] = useState<'iso' | 'closeup' | 'top'>('iso');
-  const [customRotZ, setCustomRotZ] = useState(-28);
-  const [customRotX, setCustomRotX] = useState(52);
+  const [isDragging, setIsDragging] = useState(false);
+  const [customRotZ, setCustomRotZ] = useState(-8);
+  const [customRotX, setCustomRotX] = useState(32);
   const isDraggingRef = useRef(false);
   const lastMouseXRef = useRef(0);
 
@@ -2269,20 +1594,21 @@ export default function App() {
 
   const getBoard3DTransform = () => {
     if (cameraMode === 'top') {
-      return `rotateX(16deg) rotateZ(0deg) scale(0.9)`;
+      return `rotateX(16deg) rotateZ(0deg) scale(0.98)`;
     }
     if (cameraMode === 'closeup') {
       const mid = (BOARD_SIZE - 1) / 2;
       const offsetX = (mid - currentTile.col) * 20;
       const offsetY = (mid - currentTile.row) * 20;
-      return `rotateX(58deg) rotateZ(${customRotZ}deg) scale(1.18) translate3d(${offsetX}px, ${offsetY}px, 0px)`;
+      return `rotateX(58deg) rotateZ(${customRotZ}deg) scale(1.3) translate3d(${offsetX}px, ${offsetY}px, 0px)`;
     }
-    return `rotateX(${customRotX}deg) rotateZ(${customRotZ}deg) scale(0.86)`;
+    return `rotateX(${customRotX}deg) rotateZ(${customRotZ}deg) scale(0.9)`;
   };
 
   const handlePointerDown = (e: React.PointerEvent) => {
     if (cameraMode === 'top') return;
     isDraggingRef.current = true;
+    setIsDragging(true);
     lastMouseXRef.current = e.clientX;
   };
 
@@ -2295,6 +1621,7 @@ export default function App() {
 
   const handlePointerUp = () => {
     isDraggingRef.current = false;
+    setIsDragging(false);
   };
 
   // Ranked players for Final Winner Settlement
@@ -2311,17 +1638,17 @@ export default function App() {
 
   return (
     <div
-      className="min-h-screen text-[#0c4a6e] flex items-center justify-center p-2 font-sans select-none overflow-hidden"
+      className="min-h-[100dvh] text-[#0c4a6e] flex items-center justify-center p-2 max-sm:p-0 font-sans select-none overflow-hidden"
       onPointerUp={handlePointerUp}
     >
       {/* ======================================================== */}
       {/* SMARTPHONE FRAME CONTAINER (Light Blue Sky Theme)         */}
       {/* ======================================================== */}
-      <div className="relative w-full max-w-[500px] h-[880px] bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#dbeefe] rounded-[52px] border-[7px] border-white shadow-[0_0_0_3px_#bfe3f7,0_25px_60px_-15px_rgba(14,116,180,0.4)] p-3 flex flex-col justify-between overflow-hidden">
+      <div className="relative w-[393px] h-[852px] max-sm:w-full max-sm:h-[100dvh] max-sm:rounded-none max-sm:border-0 max-sm:shadow-none bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#dbeefe] rounded-[52px] border-[7px] border-white shadow-[0_0_0_3px_#bfe3f7,0_25px_60px_-15px_rgba(14,116,180,0.4)] p-3 flex flex-col justify-between overflow-hidden isolate">
 
         {/* Soft Daylight Sun & Cloud Glow */}
-        <div className="absolute -top-12 -right-12 w-56 h-56 bg-white/50 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/40 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-12 -right-12 w-56 h-56 rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.5),transparent)] pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.4),transparent)] pointer-events-none" />
 
         {/* ======================================================== */}
         {/* TOP: 4-PLAYER LIVE SCOREBOARD                            */}
@@ -2365,9 +1692,9 @@ export default function App() {
 
           {/* Camera Mode Pills */}
           <div className="w-full flex items-center justify-between px-1 mt-1">
-            <div className="flex items-center bg-white/80 backdrop-blur-md p-0.5 rounded-full border-2 border-white shadow-xs text-[9.5px]">
+            <div className="flex items-center bg-white/90 p-0.5 rounded-full border-2 border-white shadow-xs text-[9.5px]">
               <button
-                onClick={() => { setCameraMode('iso'); setCustomRotX(52); setCustomRotZ(-28); }}
+                onClick={() => { setCameraMode('iso'); setCustomRotX(32); setCustomRotZ(-8); }}
                 className={`px-2 py-0.5 rounded-full font-bold transition cursor-pointer ${
                   cameraMode === 'iso' ? 'bg-sky-400 text-white' : 'text-[#2f6f9a]'
                 }`}
@@ -2405,20 +1732,20 @@ export default function App() {
         {/* CENTER STAGE: 3D LIFE-JOURNEY BOARD                      */}
         {/* ======================================================== */}
         <div
-          className="relative my-auto w-full h-[520px] flex items-center justify-center scene-perspective overflow-visible cursor-grab active:cursor-grabbing"
+          className="relative my-auto w-full h-[520px] flex items-center justify-center scene-perspective overflow-visible cursor-grab active:cursor-grabbing touch-none"
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
+          onPointerCancel={handlePointerUp}
         >
           {/* Island Base */}
           <div
             style={{ transform: getBoard3DTransform() }}
-            className="w-[440px] h-[440px] bg-gradient-to-br from-sky-200 via-sky-100 to-cyan-200 rounded-[32px] p-2.5 border-4 border-white board-slab-3d transition-transform duration-500 ease-out relative"
+            className={`w-full aspect-square shrink-0 bg-gradient-to-br from-sky-200 via-sky-100 to-cyan-200 rounded-[32px] p-2.5 border-4 border-white board-slab-3d ${isDragging ? '' : 'transition-transform duration-500 ease-out'} relative`}
           >
-            <div className="grid grid-cols-6 grid-rows-6 gap-1.5 w-full h-full relative preserve-3d">
+            <div style={{ transform: "translateZ(1px)" }} className="grid grid-cols-7 grid-rows-7 gap-1 w-full h-full relative preserve-3d">
               {BOARD_TILES.map((tile) => {
                 const isHere = currentPlayer.position === tile.id;
                 const isAccident = tile.id === CAR_CRASH_TILE;
-                const buildingLevel = ownedTiles[tile.id] || tile.baseBuilding || 0;
                 const ownerIdx = tileOwners[tile.id];
                 const isChance = tile.type === 'CHANCE';
 
@@ -2426,11 +1753,11 @@ export default function App() {
                   <div
                     key={tile.id}
                     style={{ gridArea: tile.gridArea }}
-                    className={`relative rounded-2xl flex flex-col justify-between p-1 transition-all duration-300 border-2 preserve-3d ${
+                    className={`relative rounded-2xl flex flex-col justify-between p-1 transition-all duration-300 border-2 ${
                       isHere
                         ? 'bg-gradient-to-b from-sky-100 to-white border-sky-400 tile-3d-active z-20'
                         : isAccident && isHighlightCar
-                        ? 'bg-gradient-to-b from-red-100 to-red-50 border-red-500 tile-3d-danger animate-pulse'
+                        ? 'bg-gradient-to-b from-red-100 to-red-50 border-red-500 tile-3d-danger animate-danger-pulse'
                         : isChance
                         ? 'bg-gradient-to-b from-amber-200 to-yellow-100 border-amber-400 tile-3d'
                         : 'bg-white border-white tile-3d'
@@ -2468,28 +1795,7 @@ export default function App() {
                       <span className="w-1 h-0.5 bg-white" />
                     </div>
 
-                    {/* 3D Life-Event Milestone / Chance Block Rising from Every Tile */}
-                    <div
-                      style={{ transform: "translateZ(4px)" }}
-                      className="absolute top-2.5 right-3 preserve-3d pointer-events-none z-30"
-                    >
-                      <True3DTileLandmark
-                        tileId={tile.model}
-                        level={buildingLevel}
-                        color={tile.color}
-                        icon={tile.icon}
-                      />
-                    </div>
 
-                    {/* 3D Street Tree */}
-                    {tile.hasTree && tile.model !== 5 && (
-                      <div
-                        style={{ transform: "translateZ(4px)" }}
-                        className="absolute bottom-2 left-1.5 preserve-3d pointer-events-none z-30"
-                      >
-                        <True3DTree scale={0.7} />
-                      </div>
-                    )}
                   </div>
                 );
               })}
@@ -2501,35 +1807,10 @@ export default function App() {
                 style={{ gridArea: `2 / 2 / ${BOARD_SIZE} / ${BOARD_SIZE}` }}
                 className="bg-gradient-to-br from-[#e0f2fe] via-white to-[#dff1fb] rounded-3xl p-2.5 border-4 border-white flex flex-col justify-between items-center text-center shadow-[inset_0_4px_15px_rgba(14,165,233,0.25)] relative preserve-3d"
               >
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-8 bg-gradient-to-r from-sky-400/70 via-cyan-300/80 to-sky-400/70 border-y border-white/70 -rotate-6 pointer-events-none" />
-
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-white/90 to-sky-100/90 border-4 border-white shadow-md flex items-center justify-center pointer-events-none">
-                  <div className="w-16 h-16 rounded-full bg-sky-300/50 border-2 border-sky-400/40" />
-                </div>
-
-                <div style={{ transform: "translateZ(4px)" }} className="absolute top-14 left-5 preserve-3d pointer-events-none z-20">
-                  <True3DLandmarkSkyscraper />
-                </div>
-                <div style={{ transform: "translateZ(4px)" }} className="absolute top-14 right-5 preserve-3d pointer-events-none z-20">
-                  <True3DCityBuilding level={2} color="#10b981" />
-                </div>
-                <div style={{ transform: "translateZ(4px)" }} className="absolute bottom-14 left-4 preserve-3d pointer-events-none z-20">
-                  <True3DTree scale={1.1} />
-                </div>
-                <div style={{ transform: "translateZ(4px)" }} className="absolute bottom-16 left-11 preserve-3d pointer-events-none z-20">
-                  <True3DTree scale={0.85} />
-                </div>
-                <div style={{ transform: "translateZ(4px)" }} className="absolute bottom-14 right-4 preserve-3d pointer-events-none z-20">
-                  <True3DTree scale={1.05} />
-                </div>
-                <div style={{ transform: "translateZ(4px)" }} className="absolute top-24 right-10 preserve-3d pointer-events-none z-20">
-                  <True3DMiniCar color="#f59e0b" rotZ={75} />
-                </div>
-
                 {/* Active Player Cash Pill */}
                 <div
                   style={{ transform: "translateZ(6px)" }}
-                  className="w-full bg-white/95 backdrop-blur-md rounded-full py-1.5 px-3 border-2 border-[#bfe3f7] shadow-sm flex items-center justify-between z-30"
+                  className="w-full bg-white rounded-full py-1.5 px-3 border-2 border-[#bfe3f7] shadow-sm flex items-center justify-between z-30"
                 >
                   <span className="text-[10px] text-[#2f6f9a] font-extrabold flex items-center gap-1 min-w-0">
                     <ChibiAvatar preset={currentPlayer.preset} size={16} />
@@ -2626,10 +1907,10 @@ export default function App() {
                       style={{
                         transform: `translateZ(${-charJumpZ + 2}px) scale(${isTurn && hopProgress ? 0.55 : 0.85})`,
                       }}
-                      className="absolute w-7 h-4 bg-slate-900/45 rounded-full blur-[2px] transition-all duration-150"
+                      className="absolute w-7 h-4 rounded-full bg-[radial-gradient(closest-side,rgba(15,23,42,0.45),transparent)] transition-transform duration-150"
                     />
                     {isTurn && (
-                      <div className="absolute w-10 h-10 rounded-full border-2 border-sky-400 bg-sky-300/30 animate-shield-pulse" />
+                      <div className="absolute w-10 h-10 rounded-full border-2 border-sky-400 bg-sky-300/30" />
                     )}
 
                     <True3DCharacter
@@ -2650,7 +1931,7 @@ export default function App() {
         {/* CHANCE CARD DRAW MODAL (3-Card Fan)                      */}
         {/* ======================================================== */}
         {chanceModalStep !== 'closed' && (
-          <div className="absolute inset-0 bg-sky-950/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-sky-950/55 z-50 flex items-center justify-center p-4">
             {chanceModalStep === 'pick' && (
               <div className="w-full max-w-[360px] card-cute rounded-[32px] p-5 text-center space-y-4 animate-card-in">
                 <div className="text-xs font-black text-sky-500 tracking-wider">
@@ -2908,7 +2189,7 @@ export default function App() {
         {/* FINAL 4-PLAYER RESULTS MODAL                             */}
         {/* ======================================================== */}
         {showSettlementModal && (
-          <div className="absolute inset-0 bg-sky-950/40 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-sky-950/55 z-50 flex items-center justify-center p-4">
             <div className="w-full max-w-[380px] card-cute rounded-[32px] p-5 space-y-3 animate-card-in">
               <div className="text-center">
                 <div className="text-xs font-black text-sky-600">🏆 Life Journey • Final Rankings</div>
@@ -2980,7 +2261,7 @@ export default function App() {
         {/* BOTTOM: STATUS & QUICK ACTIONS                           */}
         {/* ======================================================== */}
         <div className="space-y-1.5 z-40">
-          <div className="bg-white/90 backdrop-blur-md rounded-full py-1.5 px-3 border-2 border-white shadow-sm text-center text-xs font-bold text-[#0c4a6e] truncate">
+          <div className="bg-white/95 rounded-full py-1.5 px-3 border-2 border-white shadow-sm text-center text-xs font-bold text-[#0c4a6e] truncate">
             {logMessage}
           </div>
 

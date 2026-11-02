@@ -173,3 +173,19 @@ body {
   100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 .animate-card-in { animation: evCardIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* Danger tile pulse: animates only box-shadow. Animating opacity on a
+   preserve-3d element flattens it each frame and flickers on mobile Safari. */
+@keyframes dangerPulse {
+  0%, 100% { box-shadow: -5px 8px 0px #dc2626, 0 0 10px rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: -5px 8px 0px #dc2626, 0 0 28px rgba(239, 68, 68, 0.9); }
+}
+.animate-danger-pulse {
+  animation: dangerPulse 1s ease-in-out infinite;
+}
+
+/* Stop pull-to-refresh / rubber-band bounce from repainting the scene */
+html, body {
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
