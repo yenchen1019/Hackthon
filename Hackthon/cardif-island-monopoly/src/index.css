@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Desktop layout: wide and tall enough screens get the landscape game screen */
+@custom-variant desk (@media (min-width: 900px) and (min-height: 520px));
+
 body {
   margin: 0;
   background-color: #eaf6fd;
